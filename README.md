@@ -1,2 +1,2 @@
 # Snake
-Snake clone written using libGDX
+This is a Snake clone written using libGDX
