@@ -28,15 +28,28 @@ public final class Assets implements Disposable {
     private static final AssetDescriptor<Texture> BACKGROUND_TEXTURE_ASSET_DESCRIPTOR
             = new AssetDescriptor<Texture>("background.png", Texture.class);
 
+    private static final AssetDescriptor<Texture> RIGHT_ARROW_TEXTURE_ASSET_DESCRIPTOR
+            = new AssetDescriptor<Texture>("right-arrow.png", Texture.class);
+    private static final AssetDescriptor<Texture> RIGHT_ARROW_DOWN_TEXTURE_ASSET_DESCRIPTOR
+            = new AssetDescriptor<Texture>("right-arrow-over.png", Texture.class);
+
+    private static final AssetDescriptor<Texture> SNAKE_BODY_TEXTURE_ASSET_DESCRIPTOR
+            = new AssetDescriptor<Texture>("snake-body.png", Texture.class);
+
+    private static final AssetDescriptor<Texture> GRID_FRAME_TEXTURE_ASSET_DESCRIPTOR
+            = new AssetDescriptor<Texture>("grid-frame.png", Texture.class);
+
     /*
      * Font properties.
      */
     private static final int TITLE_FONT_SIZE = 62;
     private static final int BUTTON_FONT_SIZE = 36;
+    private static final int SMALL_FONT_SIZE = 28;
 
     private final AssetManager assetManager = new AssetManager();
     private BitmapFont titleFont;
     private BitmapFont buttonFont;
+    private BitmapFont smallFont;
 
     /**
      * Creates a new {@code Assets} instance.
@@ -73,7 +86,9 @@ public final class Assets implements Disposable {
         // need this so we can load in fonts
         assetManager.setLoader(FreeTypeFontGenerator.class,
                 new FreeTypeFontGeneratorLoader(new InternalFileHandleResolver()));
-        loadAsset(FONT_GENERATOR_ASSET_DESCRIPTOR, BACKGROUND_TEXTURE_ASSET_DESCRIPTOR);
+        loadAsset(FONT_GENERATOR_ASSET_DESCRIPTOR, BACKGROUND_TEXTURE_ASSET_DESCRIPTOR,
+                RIGHT_ARROW_TEXTURE_ASSET_DESCRIPTOR, RIGHT_ARROW_DOWN_TEXTURE_ASSET_DESCRIPTOR,
+                SNAKE_BODY_TEXTURE_ASSET_DESCRIPTOR, GRID_FRAME_TEXTURE_ASSET_DESCRIPTOR);
     }
 
     /**
@@ -82,7 +97,9 @@ public final class Assets implements Disposable {
     public boolean isFinishedLoading() {
         if (assetManager.update()) {
             loadFonts();
-            addSmoothingFilter(getBackgroundTexture());
+            addSmoothingFilter(getBackgroundTexture(), getRightArrowTexture(),
+                    getRightArrowDownTexture(), getSnakeBodyTexture(),
+                    getGridFrameTexture());
             return true;
         } else {
             return false;
@@ -100,6 +117,7 @@ public final class Assets implements Disposable {
 
         titleFont = loadFont(fontGenerator, parameter, TITLE_FONT_SIZE);
         buttonFont = loadFont(fontGenerator, parameter, BUTTON_FONT_SIZE);
+        smallFont = loadFont(fontGenerator, parameter, SMALL_FONT_SIZE);
 
         // finished with font generator so dispose it
         assetManager.unload(FONT_GENERATOR_ASSET_DESCRIPTOR.fileName);
@@ -128,6 +146,10 @@ public final class Assets implements Disposable {
         return buttonFont;
     }
 
+    public BitmapFont getSmallFont() {
+        return smallFont;
+    }
+
     /**
      * @return the splash background {@link Texture}
      */
@@ -140,6 +162,28 @@ public final class Assets implements Disposable {
      */
     public Texture getBackgroundTexture() {
         return assetManager.get(BACKGROUND_TEXTURE_ASSET_DESCRIPTOR);
+    }
+
+    /**
+     * @return the right arrow {@link Texture}
+     */
+    public Texture getRightArrowTexture() {
+        return assetManager.get(RIGHT_ARROW_TEXTURE_ASSET_DESCRIPTOR);
+    }
+
+    public Texture getRightArrowDownTexture() {
+        return assetManager.get(RIGHT_ARROW_DOWN_TEXTURE_ASSET_DESCRIPTOR);
+    }
+
+    /**
+     * @return the snake body {@link Texture}
+     */
+    public Texture getSnakeBodyTexture() {
+        return assetManager.get(SNAKE_BODY_TEXTURE_ASSET_DESCRIPTOR);
+    }
+
+    public Texture getGridFrameTexture() {
+        return assetManager.get(GRID_FRAME_TEXTURE_ASSET_DESCRIPTOR);
     }
 
     /**
@@ -156,6 +200,7 @@ public final class Assets implements Disposable {
         assetManager.dispose();
         titleFont.dispose();
         buttonFont.dispose();
+        smallFont.dispose();
     }
 
 }

@@ -2,9 +2,17 @@ package lowe.mike.snake.screen;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Align;
 
+import lowe.mike.snake.SnakeGame;
 import lowe.mike.snake.util.Assets;
+import lowe.mike.snake.util.Scaling;
 import lowe.mike.snake.util.ScreenManager;
+import lowe.mike.snake.util.Utils;
 
 /**
  * Screen to show when the game is being played.
@@ -23,6 +31,14 @@ final class GameScreen extends BaseScreen {
      */
     GameScreen(Assets assets, SpriteBatch spriteBatch, ScreenManager screenManager) {
         super(assets, spriteBatch, screenManager);
+        Label label = Utils.createLabel(assets.getSmallFont(), "0000");
+        label.setPosition(COMPONENT_SPACING, stage.getHeight() - COMPONENT_SPACING * 2.5f
+                - (label.getHeight() / 2));
+        Image gridFrame = new Image(assets.getGridFrameTexture());
+        Scaling.scaleActor(gridFrame);
+        gridFrame.setPosition(COMPONENT_SPACING, label.getY() - (gridFrame.getHeight() / 2));
+        this.stage.addActor(label);
+        this.stage.addActor(gridFrame);
     }
 
 }
