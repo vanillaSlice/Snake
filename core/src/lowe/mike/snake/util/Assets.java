@@ -21,34 +21,46 @@ public final class Assets implements Disposable {
      * Describe the assets to load in.
      */
     private static final AssetDescriptor<FreeTypeFontGenerator> FONT_GENERATOR_ASSET_DESCRIPTOR
-            = new AssetDescriptor<FreeTypeFontGenerator>("TECHNOLIN.ttf",
-            FreeTypeFontGenerator.class);
+            = new AssetDescriptor<FreeTypeFontGenerator>("TECHNOLIN.ttf", FreeTypeFontGenerator.class);
     private static final AssetDescriptor<Texture> SPLASH_BACKGROUND_TEXTURE_ASSET_DESCRIPTOR
             = new AssetDescriptor<Texture>("splash-background.png", Texture.class);
     private static final AssetDescriptor<Texture> BACKGROUND_TEXTURE_ASSET_DESCRIPTOR
             = new AssetDescriptor<Texture>("background.png", Texture.class);
+    private static final AssetDescriptor<Texture> MEDIUM_RIGHT_ARROW_TEXTURE_ASSET_DESCRIPTOR
+            = new AssetDescriptor<Texture>("medium-right-arrow.png", Texture.class);
+    private static final AssetDescriptor<Texture>
+            MEDIUM_RIGHT_ARROW_PRESSED_TEXTURE_ASSET_DESCRIPTOR
+            = new AssetDescriptor<Texture>("medium-right-arrow-pressed.png", Texture.class);
+    private static final AssetDescriptor<Texture> MEDIUM_LEFT_ARROW_TEXTURE_ASSET_DESCRIPTOR
+            = new AssetDescriptor<Texture>("medium-left-arrow.png", Texture.class);
+    private static final AssetDescriptor<Texture> MEDIUM_LEFT_ARROW_PRESSED_TEXTURE_ASSET_DESCRIPTOR
+            = new AssetDescriptor<Texture>("medium-left-arrow-pressed.png", Texture.class);
 
-    private static final AssetDescriptor<Texture> RIGHT_ARROW_TEXTURE_ASSET_DESCRIPTOR
-            = new AssetDescriptor<Texture>("right-arrow.png", Texture.class);
-    private static final AssetDescriptor<Texture> RIGHT_ARROW_DOWN_TEXTURE_ASSET_DESCRIPTOR
-            = new AssetDescriptor<Texture>("right-arrow-over.png", Texture.class);
 
+    // DONE UP TO HERE
     private static final AssetDescriptor<Texture> SNAKE_BODY_TEXTURE_ASSET_DESCRIPTOR
             = new AssetDescriptor<Texture>("snake-body.png", Texture.class);
-
     private static final AssetDescriptor<Texture> GRID_FRAME_TEXTURE_ASSET_DESCRIPTOR
             = new AssetDescriptor<Texture>("grid-frame.png", Texture.class);
+    private static final AssetDescriptor<Texture> RIGHT
+            = new AssetDescriptor<Texture>("large-arrow-right-up.png", Texture.class);
+    private static final AssetDescriptor<Texture> LEFT
+            = new AssetDescriptor<Texture>("large-arrow-left-up.png", Texture.class);
+    private static final AssetDescriptor<Texture> UP
+            = new AssetDescriptor<Texture>("large-arrow-up-up.png", Texture.class);
+    private static final AssetDescriptor<Texture> DOWN
+            = new AssetDescriptor<Texture>("large-arrow-down-up.png", Texture.class);
 
     /*
      * Font properties.
      */
-    private static final int TITLE_FONT_SIZE = 62;
-    private static final int BUTTON_FONT_SIZE = 36;
+    private static final int LARGE_FONT_SIZE = 62;
+    private static final int MEDIUM_FONT_SIZE = 36;
     private static final int SMALL_FONT_SIZE = 28;
 
     private final AssetManager assetManager = new AssetManager();
-    private BitmapFont titleFont;
-    private BitmapFont buttonFont;
+    private BitmapFont largeFont;
+    private BitmapFont mediumFont;
     private BitmapFont smallFont;
 
     /**
@@ -87,8 +99,14 @@ public final class Assets implements Disposable {
         assetManager.setLoader(FreeTypeFontGenerator.class,
                 new FreeTypeFontGeneratorLoader(new InternalFileHandleResolver()));
         loadAsset(FONT_GENERATOR_ASSET_DESCRIPTOR, BACKGROUND_TEXTURE_ASSET_DESCRIPTOR,
-                RIGHT_ARROW_TEXTURE_ASSET_DESCRIPTOR, RIGHT_ARROW_DOWN_TEXTURE_ASSET_DESCRIPTOR,
-                SNAKE_BODY_TEXTURE_ASSET_DESCRIPTOR, GRID_FRAME_TEXTURE_ASSET_DESCRIPTOR);
+                MEDIUM_RIGHT_ARROW_TEXTURE_ASSET_DESCRIPTOR,
+                MEDIUM_RIGHT_ARROW_PRESSED_TEXTURE_ASSET_DESCRIPTOR,
+                MEDIUM_LEFT_ARROW_TEXTURE_ASSET_DESCRIPTOR,
+                MEDIUM_LEFT_ARROW_PRESSED_TEXTURE_ASSET_DESCRIPTOR,
+
+                // DONE UP TO HERE
+                SNAKE_BODY_TEXTURE_ASSET_DESCRIPTOR, GRID_FRAME_TEXTURE_ASSET_DESCRIPTOR,
+                RIGHT, LEFT, UP, DOWN);
     }
 
     /**
@@ -97,9 +115,13 @@ public final class Assets implements Disposable {
     public boolean isFinishedLoading() {
         if (assetManager.update()) {
             loadFonts();
-            addSmoothingFilter(getBackgroundTexture(), getRightArrowTexture(),
-                    getRightArrowDownTexture(), getSnakeBodyTexture(),
-                    getGridFrameTexture());
+            addSmoothingFilter(getBackgroundTexture(), getMediumRightArrowTexture(),
+                    getMediumRightArrowPressedTexture(), getMediumLeftArrowTexture(),
+                    getMediumLeftArrowPressedTexture(),
+
+                    // DONE UP TO HERE
+                    getSnakeBodyTexture(),
+                    getGridFrameTexture(), getRight(), getLeft(), getUp(), getDown());
             return true;
         } else {
             return false;
@@ -115,8 +137,8 @@ public final class Assets implements Disposable {
         parameter.minFilter = Texture.TextureFilter.Linear;
         parameter.magFilter = Texture.TextureFilter.Linear;
 
-        titleFont = loadFont(fontGenerator, parameter, TITLE_FONT_SIZE);
-        buttonFont = loadFont(fontGenerator, parameter, BUTTON_FONT_SIZE);
+        largeFont = loadFont(fontGenerator, parameter, LARGE_FONT_SIZE);
+        mediumFont = loadFont(fontGenerator, parameter, MEDIUM_FONT_SIZE);
         smallFont = loadFont(fontGenerator, parameter, SMALL_FONT_SIZE);
 
         // finished with font generator so dispose it
@@ -133,19 +155,22 @@ public final class Assets implements Disposable {
     }
 
     /**
-     * @return the title {@link BitmapFont}
+     * @return the large {@link BitmapFont}
      */
-    public BitmapFont getTitleFont() {
-        return titleFont;
+    public BitmapFont getLargeFont() {
+        return largeFont;
     }
 
     /**
-     * @return the button {@link BitmapFont}
+     * @return the medium {@link BitmapFont}
      */
-    public BitmapFont getButtonFont() {
-        return buttonFont;
+    public BitmapFont getMediumFont() {
+        return mediumFont;
     }
 
+    /**
+     * @return the small {@link BitmapFont}
+     */
     public BitmapFont getSmallFont() {
         return smallFont;
     }
@@ -165,14 +190,49 @@ public final class Assets implements Disposable {
     }
 
     /**
-     * @return the right arrow {@link Texture}
+     * @return the medium right arrow {@link Texture}
      */
-    public Texture getRightArrowTexture() {
-        return assetManager.get(RIGHT_ARROW_TEXTURE_ASSET_DESCRIPTOR);
+    public Texture getMediumRightArrowTexture() {
+        return assetManager.get(MEDIUM_RIGHT_ARROW_TEXTURE_ASSET_DESCRIPTOR);
     }
 
-    public Texture getRightArrowDownTexture() {
-        return assetManager.get(RIGHT_ARROW_DOWN_TEXTURE_ASSET_DESCRIPTOR);
+    /**
+     * @return the medium right arrow pressed {@link Texture}
+     */
+    public Texture getMediumRightArrowPressedTexture() {
+        return assetManager.get(MEDIUM_RIGHT_ARROW_PRESSED_TEXTURE_ASSET_DESCRIPTOR);
+    }
+
+    /**
+     * @return the medium left arrow {@link Texture}
+     */
+    public Texture getMediumLeftArrowTexture() {
+        return assetManager.get(MEDIUM_LEFT_ARROW_TEXTURE_ASSET_DESCRIPTOR);
+    }
+
+    /**
+     * @return the medium left arrow pressed {@link Texture}
+     */
+    public Texture getMediumLeftArrowPressedTexture() {
+        return assetManager.get(MEDIUM_LEFT_ARROW_PRESSED_TEXTURE_ASSET_DESCRIPTOR);
+    }
+
+    ///////// DONE UP TO HERE
+
+    public Texture getRight() {
+        return assetManager.get(RIGHT);
+    }
+
+    public Texture getLeft() {
+        return assetManager.get(LEFT);
+    }
+
+    public Texture getUp() {
+        return assetManager.get(UP);
+    }
+
+    public Texture getDown() {
+        return assetManager.get(DOWN);
     }
 
     /**
@@ -186,6 +246,8 @@ public final class Assets implements Disposable {
         return assetManager.get(GRID_FRAME_TEXTURE_ASSET_DESCRIPTOR);
     }
 
+    /////////////
+
     /**
      * Disposes the splash background {@link Texture}.
      */
@@ -198,8 +260,8 @@ public final class Assets implements Disposable {
     @Override
     public void dispose() {
         assetManager.dispose();
-        titleFont.dispose();
-        buttonFont.dispose();
+        largeFont.dispose();
+        mediumFont.dispose();
         smallFont.dispose();
     }
 

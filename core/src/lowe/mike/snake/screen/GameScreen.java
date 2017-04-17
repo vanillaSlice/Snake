@@ -1,14 +1,10 @@
 package lowe.mike.snake.screen;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.utils.Align;
 
-import lowe.mike.snake.SnakeGame;
 import lowe.mike.snake.util.Assets;
 import lowe.mike.snake.util.Scaling;
 import lowe.mike.snake.util.ScreenManager;
@@ -39,6 +35,26 @@ final class GameScreen extends BaseScreen {
         gridFrame.setPosition(COMPONENT_SPACING, label.getY() - (gridFrame.getHeight() / 2));
         this.stage.addActor(label);
         this.stage.addActor(gridFrame);
+
+        Image right = new Image(assets.getRight());
+        Scaling.scaleActor(right);
+        right.setPosition(110f, 50f);
+        this.stage.addActor(right);
+
+        Image left = new Image(assets.getLeft());
+        Scaling.scaleActor(left);
+        left.setPosition(38f, 50f);
+        this.stage.addActor(left);
+
+        Image up = new Image(assets.getUp());
+        Scaling.scaleActor(up);
+        up.setPosition(74f, 82f);
+        this.stage.addActor(up);
+
+        Image down = new Image(assets.getDown());
+        Scaling.scaleActor(down);
+        down.setPosition(74f, 18f);
+        this.stage.addActor(down);
     }
 
 }

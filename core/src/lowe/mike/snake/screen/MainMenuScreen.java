@@ -44,7 +44,7 @@ final class MainMenuScreen extends BaseScreen {
 
         // add title
         table.row().padBottom(COMPONENT_SPACING);
-        Label titleLabel = Utils.createLabel(assets.getTitleFont(), SnakeGame.TITLE);
+        Label titleLabel = Utils.createLabel(assets.getLargeFont(), SnakeGame.TITLE);
         table.add(titleLabel).expandX();
 
         // add play button
@@ -61,7 +61,7 @@ final class MainMenuScreen extends BaseScreen {
     }
 
     private TextButton createPlayButton() {
-        TextButton button = Utils.createTextButton(assets.getButtonFont(), PLAY_BUTTON_TEXT);
+        TextButton button = Utils.createTextButton(assets.getMediumFont(), PLAY_BUTTON_TEXT);
         addPlayButtonListener(button);
         return button;
     }
@@ -89,7 +89,7 @@ final class MainMenuScreen extends BaseScreen {
     }
 
     private TextButton createSettingsButton() {
-        TextButton button = Utils.createTextButton(assets.getButtonFont(), SETTINGS_BUTTON_TEXT);
+        TextButton button = Utils.createTextButton(assets.getMediumFont(), SETTINGS_BUTTON_TEXT);
         addSettingsButtonListener(button);
         return button;
     }

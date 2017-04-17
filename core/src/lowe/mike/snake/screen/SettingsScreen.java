@@ -2,19 +2,22 @@ package lowe.mike.snake.screen;
 
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Array;
 
-import lowe.mike.snake.SnakeGame;
 import lowe.mike.snake.util.Assets;
+import lowe.mike.snake.util.GamePreferences;
 import lowe.mike.snake.util.Scaling;
 import lowe.mike.snake.util.ScreenManager;
 import lowe.mike.snake.util.Utils;
-import lowe.mike.snake.world.Snake;
+import lowe.mike.snake.world.Level;
 
 /**
  * Settings screen to show settings that the user can change.
@@ -22,6 +25,15 @@ import lowe.mike.snake.world.Snake;
  * @author Mike Lowe
  */
 final class SettingsScreen extends BaseScreen {
+
+    private static final float SETTINGS_COMPONENT_SPACING = COMPONENT_SPACING * 2;
+    private static final String SOUNDS_LABEL_TEXT = "Sounds";
+    private static final String ON_BUTTON_TEXT = "On";
+    private static final String OFF_BUTTON_TEXT = "Off";
+    private static final String LEVEL_LABEL_TEXT = "Level";
+    private static final String BACK_BUTTON_TEXT = "Back";
+
+    private int level;
 
     /**
      * Creates a new {@code SettingsScreen} given {@link Assets}, a {@link SpriteBatch}
@@ -33,6 +45,7 @@ final class SettingsScreen extends BaseScreen {
      */
     SettingsScreen(Assets assets, SpriteBatch spriteBatch, ScreenManager screenManager) {
         super(assets, spriteBatch, screenManager);
+        this.level = GamePreferences.getLevel();
         Table menu = createMenu();
         this.stage.addActor(menu);
     }
@@ -42,31 +55,141 @@ final class SettingsScreen extends BaseScreen {
         table.setFillParent(true);
         table.center();
 
-        table.row();
-        Label soundsLabel = Utils.createLabel(assets.getButtonFont(), "Sounds");
-        table.add(soundsLabel).expandX().colspan(3);
-        table.row().padBottom(COMPONENT_SPACING * 2);
-        Label onOffLabel = Utils.createLabel(assets.getButtonFont(), "On Off");
-        table.add(onOffLabel).expandX().colspan(3);
+        int colspan = 3;
 
+        // add sound label
         table.row();
-        Label levelLabel = Utils.createLabel(assets.getButtonFont(), "Level");
-        table.add(levelLabel).expandX().colspan(3);
-        table.row().padBottom(COMPONENT_SPACING * 2);
-        ImageButton leftBut = Utils.createImageButton(assets);
-        table.add(leftBut).expandX().align(Align.right)
-                .size(leftBut.getWidth() * SnakeGame.VIRTUAL_WIDTH / 360f, leftBut.getHeight() * SnakeGame.VIRTUAL_HEIGHT/ 640f);
-        Label numLabel = Utils.createLabel(assets.getButtonFont(), "9");
-        table.add(numLabel).expandX();
-        ImageButton rightBut = Utils.createImageButton(assets);
-        table.add(rightBut).expandX().align(Align.left)
-                .size(rightBut.getWidth() * SnakeGame.VIRTUAL_WIDTH / 360f, rightBut.getHeight() * SnakeGame.VIRTUAL_HEIGHT/ 640f);
+        Label soundsLabel = Utils.createLabel(assets.getMediumFont(), SOUNDS_LABEL_TEXT);
+        table.add(soundsLabel).expandX().colspan(colspan);
 
+        // add sound buttons
         table.row();
-        Label backLabel = Utils.createLabel(assets.getButtonFont(), "Back");
-        table.add(backLabel).expandX().colspan(3);
+        HorizontalGroup soundButtonGroup = createSoundButtonGroup();
+        table.add(soundButtonGroup).expandX().colspan(colspan);
+
+        // add level label
+        table.row().padTop(SETTINGS_COMPONENT_SPACING);
+        Label levelLabel = Utils.createLabel(assets.getMediumFont(), LEVEL_LABEL_TEXT);
+        table.add(levelLabel).expandX().colspan(colspan);
+
+        // add level buttons
+        table.row();
+        Label numberLabel = Utils.createLabel(assets.getMediumFont(), Integer.toString(level));
+        ImageButton leftArrowButton = createLeftArrowButton(numberLabel);
+        Scaling.scaleCell(table.add(leftArrowButton).expandX().align(Align.right));
+        table.add(numberLabel).expandX();
+        ImageButton rightArrowButton = createRightArrowButton(numberLabel);
+        Scaling.scaleCell(table.add(rightArrowButton).expandX().align(Align.left));
+
+        // add back button
+        table.row().padTop(SETTINGS_COMPONENT_SPACING);
+        TextButton backButton = createBackButton();
+        table.add(backButton).expandX().colspan(colspan);
 
         return table;
+    }
+
+    private HorizontalGroup createSoundButtonGroup() {
+        HorizontalGroup group = new HorizontalGroup();
+        group.space(SETTINGS_COMPONENT_SPACING);
+
+        // create the buttons
+        boolean playSounds = GamePreferences.shouldPlaySounds();
+        TextButton onButton = Utils.createTextButton(assets.getMediumFont(), ON_BUTTON_TEXT);
+        TextButton offButton = Utils.createTextButton(assets.getMediumFont(), OFF_BUTTON_TEXT);
+        onButton.setChecked(playSounds);
+        offButton.setChecked(!playSounds);
+        addSoundButtonListener(onButton, true);
+        addSoundButtonListener(offButton, false);
+
+        // add to button group
+        ButtonGroup<TextButton> buttonGroup = new ButtonGroup<TextButton>();
+        buttonGroup.setMaxCheckCount(1);
+        buttonGroup.add(onButton);
+        buttonGroup.add(offButton);
+
+        // add to horizontal group
+        group.addActor(onButton);
+        group.addActor(offButton);
+
+        return group;
+    }
+
+    private void addSoundButtonListener(final TextButton button, final boolean playSounds) {
+        button.addListener(new ChangeListener() {
+
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (button.isChecked()) {
+                    GamePreferences.setPlaySounds(playSounds);
+                }
+            }
+
+        });
+    }
+
+    private ImageButton createLeftArrowButton(Label numberLabel) {
+        ImageButton button = Utils.createImageButton(assets.getMediumLeftArrowTexture(),
+                assets.getMediumLeftArrowPressedTexture());
+        addLeftArrowButtonListener(button, numberLabel);
+        return button;
+    }
+
+    private void addLeftArrowButtonListener(final ImageButton button, final Label numberLabel) {
+        button.addListener(new ChangeListener() {
+
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                updateLevel(level - 1, numberLabel);
+            }
+
+        });
+    }
+
+    private void updateLevel(int level, Label numberLabel) {
+        if (Level.isValid(level)) {
+            this.level = level;
+            numberLabel.setText(Integer.toString(this.level));
+            GamePreferences.setLevel(this.level);
+        }
+    }
+
+    private ImageButton createRightArrowButton(Label numberLabel) {
+        ImageButton button = Utils.createImageButton(assets.getMediumRightArrowTexture(),
+                assets.getMediumRightArrowPressedTexture());
+        addRightArrowButtonListener(button, numberLabel);
+        return button;
+    }
+
+    private void addRightArrowButtonListener(final ImageButton button, final Label numberLabel) {
+        button.addListener(new ChangeListener() {
+
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                updateLevel(level + 1, numberLabel);
+            }
+
+        });
+    }
+
+    private TextButton createBackButton() {
+        TextButton button = Utils.createTextButton(assets.getMediumFont(), BACK_BUTTON_TEXT);
+        addBackButtonListener(button);
+        return button;
+    }
+
+    private void addBackButtonListener(final TextButton button) {
+        button.addListener(new ChangeListener() {
+
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (button.isChecked()) {
+                    screenManager.switchToPreviousScreen();
+                    button.setChecked(false);
+                }
+            }
+
+        });
     }
 
 }

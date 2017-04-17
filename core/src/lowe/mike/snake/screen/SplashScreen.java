@@ -1,7 +1,7 @@
 package lowe.mike.snake.screen;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import lowe.mike.snake.util.Assets;
 import lowe.mike.snake.util.ScreenManager;

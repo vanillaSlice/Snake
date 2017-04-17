@@ -2,6 +2,7 @@ package lowe.mike.snake.util;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 
 import lowe.mike.snake.SnakeGame;
 
@@ -34,6 +35,13 @@ public final class Scaling {
      */
     public static void scaleActor(Actor actor) {
         actor.setScale(X_SCALE, Y_SCALE);
+    }
+
+    /**
+     * @param cell the {@link Cell} to scale
+     */
+    public static void scaleCell(Cell cell) {
+        cell.size(cell.getActor().getWidth() * X_SCALE, cell.getActor().getHeight() * Y_SCALE);
     }
 
 }

@@ -1,6 +1,5 @@
 package lowe.mike.snake.world;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
@@ -26,7 +25,7 @@ public class World {
 
     private void setFoodPosition() {
         int x = (int) (MathUtils.random(20) * (snake.getWidth()) / snake.getScaleX());
-        int y = (int)(MathUtils.random(20) * (snake.getHeight()) / snake.getScaleY());
+        int y = (int) (MathUtils.random(20) * (snake.getHeight()) / snake.getScaleY());
         food.set(x, y);
     }
 

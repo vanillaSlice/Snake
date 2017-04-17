@@ -1,6 +1,7 @@
 package lowe.mike.snake.util;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -8,8 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
-
-import lowe.mike.snake.SnakeGame;
 
 /**
  * {@code Utils} provides useful helper methods that are
@@ -63,15 +62,25 @@ public final class Utils {
         return button;
     }
 
-    public static ImageButton createImageButton(Assets assets) {
+    /**
+     * Creates an {@link ImageButton} with the given up and down {@link Texture}s.
+     *
+     * @param up   the up {@link Texture}
+     * @param down the down {@link Texture}
+     * @return the {@link ImageButton}
+     */
+    public static ImageButton createImageButton(Texture up, Texture down) {
         ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
-        style.imageUp = new TextureRegionDrawable(new TextureRegion(assets.getRightArrowTexture()));
-        style.imageOver = new TextureRegionDrawable(new TextureRegion(assets.getRightArrowDownTexture()));
+        style.imageUp = getTextureRegionDrawable(up);
+        style.imageDown = getTextureRegionDrawable(down);
+        style.imageOver = style.imageDown;
         ImageButton button = new ImageButton(style);
-       // button.setTransform(true);
-       // button.setScale(SnakeGame.VIRTUAL_WIDTH / 360f, SnakeGame.VIRTUAL_HEIGHT/ 640f);
         button.align(Align.center);
         return button;
+    }
+
+    private static TextureRegionDrawable getTextureRegionDrawable(Texture texture) {
+        return new TextureRegionDrawable(new TextureRegion(texture));
     }
 
 }
