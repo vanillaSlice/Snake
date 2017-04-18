@@ -1,14 +1,20 @@
 package lowe.mike.snake.screen;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 import lowe.mike.snake.util.Assets;
-import lowe.mike.snake.util.Scaling;
 import lowe.mike.snake.util.ScreenManager;
 import lowe.mike.snake.util.Utils;
+import lowe.mike.snake.world.Snake;
+import lowe.mike.snake.world.World;
 
 /**
  * Screen to show when the game is being played.
@@ -16,6 +22,8 @@ import lowe.mike.snake.util.Utils;
  * @author Mike Lowe
  */
 final class GameScreen extends BaseScreen {
+
+    private final World world;
 
     /**
      * Creates a new {@code GameScreen} given {@link Assets}, a {@link SpriteBatch}
@@ -31,153 +39,63 @@ final class GameScreen extends BaseScreen {
         label.setPosition(COMPONENT_SPACING, stage.getHeight() - COMPONENT_SPACING * 2.5f
                 - (label.getHeight() / 2));
         Image gridFrame = new Image(assets.getGridFrameTexture());
-        Scaling.scaleActor(gridFrame);
         gridFrame.setPosition(COMPONENT_SPACING, label.getY() - (gridFrame.getHeight() / 2));
         this.stage.addActor(label);
         this.stage.addActor(gridFrame);
 
-        Image right = new Image(assets.getRight());
-        Scaling.scaleActor(right);
-        right.setPosition(110f, 50f);
-        this.stage.addActor(right);
+        ImageButton rightButton = Utils.createImageButton(assets.getLargeRightArrowTexture(),
+                assets.getLargeRightArrowPressedTexture());
+        rightButton.setPosition(110f, 50f);
+        this.stage.addActor(rightButton);
 
-        Image left = new Image(assets.getLeft());
-        Scaling.scaleActor(left);
-        left.setPosition(38f, 50f);
-        this.stage.addActor(left);
+        ImageButton leftButton = Utils.createImageButton(assets.getLargeLeftArrowTexture(),
+                assets.getLargeLeftArrowPressedTexture());
+        leftButton.setPosition(38f, 50f);
+        this.stage.addActor(leftButton);
 
-        Image up = new Image(assets.getUp());
-        Scaling.scaleActor(up);
-        up.setPosition(74f, 82f);
-        this.stage.addActor(up);
+        ImageButton upButton = Utils.createImageButton(assets.getLargeUpArrowTexture(),
+                assets.getLargeUpArrowPressedTexture());
+        upButton.setPosition(74f, 82f);
+        this.stage.addActor(upButton);
 
-        Image down = new Image(assets.getDown());
-        Scaling.scaleActor(down);
-        down.setPosition(74f, 18f);
-        this.stage.addActor(down);
+        ImageButton downButton = Utils.createImageButton(assets.getLargeDownArrowTexture(),
+                assets.getLargeDownArrowPressedTexture());
+        downButton.setPosition(74f, 18f);
+        this.stage.addActor(downButton);
+
+        ImageButton pauseButton = Utils.createImageButton(assets.getPauseTexture(),
+                assets.getPausePressedTexture());
+        pauseButton.setPosition(152f, 100f);
+        pauseButton.addListener(new InputListener() {
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                System.out.println("Paused");
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
+        this.stage.addActor(pauseButton);
+        this.world = new World(assets, gridFrame.getX(), gridFrame.getY(), gridFrame.getWidth() / 2, gridFrame.getHeight() / 2);
+        this.stage.addActor(this.world.getSnake());
+    }
+
+    @Override
+    void update(float delta) {
+        world.update(delta);
+        handleUserInput();
+    }
+
+    private void handleUserInput() {
+        Snake snake = world.getSnake();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && snake.direction != Snake.Direction.DOWN) {
+            snake.direction = Snake.Direction.UP;
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT) && snake.direction != Snake.Direction.LEFT) {
+            snake.direction = Snake.Direction.RIGHT;
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN) && snake.direction != Snake.Direction.UP) {
+            snake.direction = Snake.Direction.DOWN;
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT) && snake.direction != Snake.Direction.RIGHT) {
+            snake.direction = Snake.Direction.LEFT;
+        }
     }
 
 }
-
-//
-//import com.badlogic.gdx.Gdx;
-//import com.badlogic.gdx.Input;
-//import com.badlogic.gdx.ScreenAdapter;
-//import com.badlogic.gdx.graphics.GL20;
-//import com.badlogic.gdx.graphics.OrthographicCamera;
-//import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-//import com.badlogic.gdx.scenes.scene2d.Stage;
-//import com.badlogic.gdx.utils.viewport.FitViewport;
-//import com.badlogic.gdx.utils.viewport.Viewport;
-//
-//import lowe.mike.snake.SnakeGame;
-//import lowe.mike.snake.util.Assets;
-//import lowe.mike.snake.world.Snake;
-//
-///**
-// * Screen to show when the game is being played.
-// *
-// * @author Mike Lowe
-// */
-//public final class GameScreen extends ScreenAdapter {
-//
-//
-//    private final Assets assets;
-//    private final SpriteBatch spriteBatch;
-//    private final Stage stage;
-//    private final OrthographicCamera camera = new OrthographicCamera();
-//    private final Viewport viewport;
-//
-//
-//    //sort this
-//    private int width;
-//    private int height;
-//    private final Snake snake;
-//    private float tickInterval = .01f;
-//    private float tick;
-//
-//    public GameScreen(Assets assets, SpriteBatch spriteBatch) {
-//        this.assets = assets;
-//        this.spriteBatch = spriteBatch;
-//        this.camera.setToOrtho(false);
-//        this.viewport = new FitViewport(SnakeGame.VIRTUAL_WIDTH, SnakeGame.VIRTUAL_HEIGHT,
-//                this.camera);
-//        this.stage = new Stage(this.viewport, this.spriteBatch);
-//
-//
-//        this.snake = new Snake();
-//        this.width = Gdx.graphics.getWidth() / snake.texture.getWidth();
-//        this.height = Gdx.graphics.getHeight() / snake.texture.getHeight();
-//
-//
-//
-//        addBackground(backgroundTexture);
-//    }
-//
-//    private void addBackground(Texture backgroundTexture) {
-//        Image background = new Image(backgroundTexture);
-//        Scaling.scaleActor(background);
-//        stage.addActor(background);
-//    }
-//
-//    @Override
-//    public void render(float delta) {
-//        Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
-//        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-//        handleUserInput();
-//        if (tick > tickInterval) {
-//            tick = 0f;
-//            switch (snake.direction) {
-//                case UP:
-//                    snake.y++;
-//                    break;
-//                case RIGHT:
-//                    snake.x++;
-//                    break;
-//                case DOWN:
-//                    snake.y--;
-//                    break;
-//                case LEFT:
-//                    snake.x--;
-//                    break;
-//            }
-//            // rough calculations -- turn into grid
-//            if (snake.x < 0) {
-//                snake.x = width - 1;
-//            }
-//            if (snake.x > width - 1) {
-//                snake.x = 0;
-//            }
-//            if (snake.y < 0) {
-//                snake.y = height - 1;
-//            }
-//            if (snake.y > height - 1) {
-//                snake.y = 0;
-//            }
-//        } else {
-//            tick += delta;
-//        }
-//
-//        spriteBatch.begin();
-//        if (assets.isFinishedLoading()) {
-//            spriteBatch.draw(assets.getBackgroundTexture(), 0, 0);
-//        } else {
-//            spriteBatch.draw(assets.getSplashBackgroundTexture(), 0, 0);
-//        }
-//        spriteBatch.draw(snake.texture, snake.x * snake.texture.getWidth(), snake.y * snake.texture.getHeight());
-//        spriteBatch.end();
-//    }
-//
-//    private void handleUserInput() {
-//        if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && snake.direction != Snake.Direction.DOWN) {
-//            snake.direction = Snake.Direction.UP;
-//        } else if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT) && snake.direction != Snake.Direction.LEFT) {
-//            snake.direction = Snake.Direction.RIGHT;
-//        } else if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN) && snake.direction != Snake.Direction.UP) {
-//            snake.direction = Snake.Direction.DOWN;
-//        } else if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT) && snake.direction != Snake.Direction.RIGHT) {
-//            snake.direction = Snake.Direction.LEFT;
-//        }
-//    }
-//
-//}

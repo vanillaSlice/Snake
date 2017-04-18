@@ -35,21 +35,33 @@ public final class Assets implements Disposable {
             = new AssetDescriptor<Texture>("medium-left-arrow.png", Texture.class);
     private static final AssetDescriptor<Texture> MEDIUM_LEFT_ARROW_PRESSED_TEXTURE_ASSET_DESCRIPTOR
             = new AssetDescriptor<Texture>("medium-left-arrow-pressed.png", Texture.class);
+    private static final AssetDescriptor<Texture> GRID_FRAME_TEXTURE_ASSET_DESCRIPTOR
+            = new AssetDescriptor<Texture>("grid-frame.png", Texture.class);
+    private static final AssetDescriptor<Texture> LARGE_UP_ARROW_TEXTURE_ASSET_DESCRIPTOR
+            = new AssetDescriptor<Texture>("large-up-arrow.png", Texture.class);
+    private static final AssetDescriptor<Texture> LARGE_UP_ARROW_PRESSED_TEXTURE_ASSET_DESCRIPTOR
+            = new AssetDescriptor<Texture>("large-up-arrow-pressed.png", Texture.class);
+    private static final AssetDescriptor<Texture> LARGE_RIGHT_ARROW_TEXTURE_ASSET_DESCRIPTOR
+            = new AssetDescriptor<Texture>("large-right-arrow.png", Texture.class);
+    private static final AssetDescriptor<Texture> LARGE_RIGHT_ARROW_PRESSED_TEXTURE_ASSET_DESCRIPTOR
+            = new AssetDescriptor<Texture>("large-right-arrow-pressed.png", Texture.class);
+    private static final AssetDescriptor<Texture> LARGE_DOWN_ARROW_TEXTURE_ASSET_DESCRIPTOR
+            = new AssetDescriptor<Texture>("large-down-arrow.png", Texture.class);
+    private static final AssetDescriptor<Texture> LARGE_DOWN_ARROW_PRESSED_TEXTURE_ASSET_DESCRIPTOR
+            = new AssetDescriptor<Texture>("large-down-arrow-pressed.png", Texture.class);
+    private static final AssetDescriptor<Texture> LARGE_LEFT_ARROW_TEXTURE_ASSET_DESCRIPTOR
+            = new AssetDescriptor<Texture>("large-left-arrow.png", Texture.class);
+    private static final AssetDescriptor<Texture> LARGE_LEFT_ARROW_PRESSED_TEXTURE_ASSET_DESCRIPTOR
+            = new AssetDescriptor<Texture>("large-left-arrow-pressed.png", Texture.class);
+    private static final AssetDescriptor<Texture> PAUSE_TEXTURE_ASSET_DESCRIPTOR
+            = new AssetDescriptor<Texture>("pause.png", Texture.class);
+    private static final AssetDescriptor<Texture> PAUSE_PRESSED_TEXTURE_ASSET_DESCRIPTOR
+            = new AssetDescriptor<Texture>("pause-pressed.png", Texture.class);
 
 
     // DONE UP TO HERE
     private static final AssetDescriptor<Texture> SNAKE_BODY_TEXTURE_ASSET_DESCRIPTOR
             = new AssetDescriptor<Texture>("snake-body.png", Texture.class);
-    private static final AssetDescriptor<Texture> GRID_FRAME_TEXTURE_ASSET_DESCRIPTOR
-            = new AssetDescriptor<Texture>("grid-frame.png", Texture.class);
-    private static final AssetDescriptor<Texture> RIGHT
-            = new AssetDescriptor<Texture>("large-arrow-right-up.png", Texture.class);
-    private static final AssetDescriptor<Texture> LEFT
-            = new AssetDescriptor<Texture>("large-arrow-left-up.png", Texture.class);
-    private static final AssetDescriptor<Texture> UP
-            = new AssetDescriptor<Texture>("large-arrow-up-up.png", Texture.class);
-    private static final AssetDescriptor<Texture> DOWN
-            = new AssetDescriptor<Texture>("large-arrow-down-up.png", Texture.class);
 
     /*
      * Font properties.
@@ -103,10 +115,20 @@ public final class Assets implements Disposable {
                 MEDIUM_RIGHT_ARROW_PRESSED_TEXTURE_ASSET_DESCRIPTOR,
                 MEDIUM_LEFT_ARROW_TEXTURE_ASSET_DESCRIPTOR,
                 MEDIUM_LEFT_ARROW_PRESSED_TEXTURE_ASSET_DESCRIPTOR,
+                GRID_FRAME_TEXTURE_ASSET_DESCRIPTOR,
+                LARGE_UP_ARROW_TEXTURE_ASSET_DESCRIPTOR,
+                LARGE_UP_ARROW_PRESSED_TEXTURE_ASSET_DESCRIPTOR,
+                LARGE_RIGHT_ARROW_TEXTURE_ASSET_DESCRIPTOR,
+                LARGE_RIGHT_ARROW_PRESSED_TEXTURE_ASSET_DESCRIPTOR,
+                LARGE_DOWN_ARROW_TEXTURE_ASSET_DESCRIPTOR,
+                LARGE_DOWN_ARROW_PRESSED_TEXTURE_ASSET_DESCRIPTOR,
+                LARGE_LEFT_ARROW_TEXTURE_ASSET_DESCRIPTOR,
+                LARGE_LEFT_ARROW_PRESSED_TEXTURE_ASSET_DESCRIPTOR,
+                PAUSE_TEXTURE_ASSET_DESCRIPTOR,
+                PAUSE_PRESSED_TEXTURE_ASSET_DESCRIPTOR,
 
                 // DONE UP TO HERE
-                SNAKE_BODY_TEXTURE_ASSET_DESCRIPTOR, GRID_FRAME_TEXTURE_ASSET_DESCRIPTOR,
-                RIGHT, LEFT, UP, DOWN);
+                SNAKE_BODY_TEXTURE_ASSET_DESCRIPTOR);
     }
 
     /**
@@ -117,11 +139,15 @@ public final class Assets implements Disposable {
             loadFonts();
             addSmoothingFilter(getBackgroundTexture(), getMediumRightArrowTexture(),
                     getMediumRightArrowPressedTexture(), getMediumLeftArrowTexture(),
-                    getMediumLeftArrowPressedTexture(),
+                    getMediumLeftArrowPressedTexture(), getGridFrameTexture(),
+                    getLargeUpArrowTexture(), getLargeUpArrowPressedTexture(),
+                    getLargeRightArrowTexture(), getLargeRightArrowPressedTexture(),
+                    getLargeDownArrowTexture(), getLargeDownArrowPressedTexture(),
+                    getLargeLeftArrowTexture(), getLargeLeftArrowPressedTexture(),
+                    getPauseTexture(), getPausePressedTexture(),
 
                     // DONE UP TO HERE
-                    getSnakeBodyTexture(),
-                    getGridFrameTexture(), getRight(), getLeft(), getUp(), getDown());
+                    getSnakeBodyTexture());
             return true;
         } else {
             return false;
@@ -150,7 +176,6 @@ public final class Assets implements Disposable {
                                 int fontSize) {
         parameter.size = fontSize;
         BitmapFont font = fontGenerator.generateFont(parameter);
-        Scaling.scaleFont(font);
         return font;
     }
 
@@ -217,33 +242,90 @@ public final class Assets implements Disposable {
         return assetManager.get(MEDIUM_LEFT_ARROW_PRESSED_TEXTURE_ASSET_DESCRIPTOR);
     }
 
+    /**
+     * @return the grid frame {@link Texture}
+     */
+    public Texture getGridFrameTexture() {
+        return assetManager.get(GRID_FRAME_TEXTURE_ASSET_DESCRIPTOR);
+    }
+
+    /**
+     * @return the large up arrow {@link Texture}
+     */
+    public Texture getLargeUpArrowTexture() {
+        return assetManager.get(LARGE_UP_ARROW_TEXTURE_ASSET_DESCRIPTOR);
+    }
+
+    /**
+     * @return the large up arrow pressed {@link Texture}
+     */
+    public Texture getLargeUpArrowPressedTexture() {
+        return assetManager.get(LARGE_UP_ARROW_PRESSED_TEXTURE_ASSET_DESCRIPTOR);
+    }
+
+    /**
+     * @return the large right arrow {@link Texture}
+     */
+    public Texture getLargeRightArrowTexture() {
+        return assetManager.get(LARGE_RIGHT_ARROW_TEXTURE_ASSET_DESCRIPTOR);
+    }
+
+    /**
+     * @return the large right arrow pressed {@link Texture}
+     */
+    public Texture getLargeRightArrowPressedTexture() {
+        return assetManager.get(LARGE_RIGHT_ARROW_PRESSED_TEXTURE_ASSET_DESCRIPTOR);
+    }
+
+    /**
+     * @return the large down arrow {@link Texture}
+     */
+    public Texture getLargeDownArrowTexture() {
+        return assetManager.get(LARGE_DOWN_ARROW_TEXTURE_ASSET_DESCRIPTOR);
+    }
+
+    /**
+     * @return the large down arrow pressed {@link Texture}
+     */
+    public Texture getLargeDownArrowPressedTexture() {
+        return assetManager.get(LARGE_DOWN_ARROW_PRESSED_TEXTURE_ASSET_DESCRIPTOR);
+    }
+
+    /**
+     * @return the large left arrow {@link Texture}
+     */
+    public Texture getLargeLeftArrowTexture() {
+        return assetManager.get(LARGE_LEFT_ARROW_TEXTURE_ASSET_DESCRIPTOR);
+    }
+
+    /**
+     * @return the large left arrow pressed {@link Texture}
+     */
+    public Texture getLargeLeftArrowPressedTexture() {
+        return assetManager.get(LARGE_LEFT_ARROW_PRESSED_TEXTURE_ASSET_DESCRIPTOR);
+    }
+
+    /**
+     * @return the pause {@link Texture}
+     */
+    public Texture getPauseTexture() {
+        return assetManager.get(PAUSE_TEXTURE_ASSET_DESCRIPTOR);
+    }
+
+    /**
+     * @return the pause pressed {@link Texture}
+     */
+    public Texture getPausePressedTexture() {
+        return assetManager.get(PAUSE_PRESSED_TEXTURE_ASSET_DESCRIPTOR);
+    }
+
     ///////// DONE UP TO HERE
-
-    public Texture getRight() {
-        return assetManager.get(RIGHT);
-    }
-
-    public Texture getLeft() {
-        return assetManager.get(LEFT);
-    }
-
-    public Texture getUp() {
-        return assetManager.get(UP);
-    }
-
-    public Texture getDown() {
-        return assetManager.get(DOWN);
-    }
 
     /**
      * @return the snake body {@link Texture}
      */
     public Texture getSnakeBodyTexture() {
         return assetManager.get(SNAKE_BODY_TEXTURE_ASSET_DESCRIPTOR);
-    }
-
-    public Texture getGridFrameTexture() {
-        return assetManager.get(GRID_FRAME_TEXTURE_ASSET_DESCRIPTOR);
     }
 
     /////////////

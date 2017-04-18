@@ -15,8 +15,8 @@ import lowe.mike.snake.util.ScreenManager;
 public final class SnakeGame extends Game {
 
     public static final String TITLE = "Snake";
-    public static final float VIRTUAL_WIDTH = 180f;
-    public static final float VIRTUAL_HEIGHT = 320f;
+    public static final int WIDTH = 360;
+    public static final int HEIGHT = 640;
 
     private Assets assets;
     private SpriteBatch spriteBatch;

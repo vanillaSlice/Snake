@@ -1,9 +1,5 @@
 package lowe.mike.snake.world;
 
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
-
-import lowe.mike.snake.SnakeGame;
 import lowe.mike.snake.util.Assets;
 
 /**
@@ -12,21 +8,21 @@ import lowe.mike.snake.util.Assets;
 
 public class World {
 
-    public Vector2 food = new Vector2();
-
     private final Snake snake;
-    private float tickInterval = .02f;
+    private float tickInterval = .05f;
     private float tick;
+    private final float x;
+    private final float y;
+    private final float width;
+    private final float height;
 
-    public World(Assets assets) {
+    public World(Assets assets, float x, float y, float width, float height) {
         this.snake = new Snake(assets.getSnakeBodyTexture());
-        setFoodPosition();
-    }
-
-    private void setFoodPosition() {
-        int x = (int) (MathUtils.random(20) * (snake.getWidth()) / snake.getScaleX());
-        int y = (int) (MathUtils.random(20) * (snake.getHeight()) / snake.getScaleY());
-        food.set(x, y);
+        this.snake.setPosition(x, y);
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
     }
 
     public Snake getSnake() {
@@ -38,24 +34,20 @@ public class World {
             tick = 0f;
             snake.update(delta);
             // rough calculations -- turn into grid
-            if (snake.getX() < 0) {
-                snake.setX(SnakeGame.VIRTUAL_WIDTH);
+            if (snake.getX() < x - snake.getWidth()) {
+                snake.setX(width + x);
             }
-            if (snake.getX() > SnakeGame.VIRTUAL_WIDTH) {
-                snake.setX(-snake.getWidth());
+            if (snake.getX() > width + x) {
+                snake.setX(x);
             }
-            if (snake.getY() < 0) {
-                snake.setY(SnakeGame.VIRTUAL_HEIGHT);
+            if (snake.getY() < y) {
+                snake.setY(height + y);
             }
-            if (snake.getY() > SnakeGame.VIRTUAL_HEIGHT) {
-                snake.setY(-snake.getHeight());
+            if (snake.getY() > height + y) {
+                snake.setY(y);
             }
-            System.out.println(food + " " + snake.getX() + "," + snake.getY());
         } else {
             tick += delta;
-        }
-        if ((int) snake.getY() == (int) food.y && (int) snake.getX() == (int) food.x) {
-            setFoodPosition();
         }
     }
 

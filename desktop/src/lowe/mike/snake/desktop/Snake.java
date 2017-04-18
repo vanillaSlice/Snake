@@ -13,8 +13,6 @@ import lowe.mike.snake.SnakeGame;
  */
 public final class Snake {
 
-    private static final int WIDTH = 360;
-    private static final int HEIGHT = 640;
     private static final String[] ICON_PATHS = {"icon-16x16.png", "icon-32x32.png",
             "icon-64x64.png", "icon-128x128.png"};
 
@@ -27,8 +25,8 @@ public final class Snake {
     private static LwjglApplicationConfiguration initialiseConfig() {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = SnakeGame.TITLE;
-        config.width = WIDTH;
-        config.height = HEIGHT;
+        config.width = SnakeGame.WIDTH;
+        config.height = SnakeGame.HEIGHT;
         addIcons(config);
         return config;
     }

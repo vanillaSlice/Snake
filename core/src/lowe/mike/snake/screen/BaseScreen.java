@@ -14,7 +14,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import lowe.mike.snake.SnakeGame;
 import lowe.mike.snake.util.Assets;
-import lowe.mike.snake.util.Scaling;
 import lowe.mike.snake.util.ScreenManager;
 
 /**
@@ -24,7 +23,7 @@ import lowe.mike.snake.util.ScreenManager;
  */
 class BaseScreen extends ScreenAdapter {
 
-    static final float COMPONENT_SPACING = 10f;
+    static final float COMPONENT_SPACING = 20f;
 
     final Assets assets;
     final SpriteBatch spriteBatch;
@@ -62,15 +61,13 @@ class BaseScreen extends ScreenAdapter {
         this.spriteBatch = spriteBatch;
         this.screenManager = screenManager;
         this.camera.setToOrtho(false);
-        this.viewport = new FitViewport(SnakeGame.VIRTUAL_WIDTH, SnakeGame.VIRTUAL_HEIGHT,
-                this.camera);
+        this.viewport = new FitViewport(SnakeGame.WIDTH, SnakeGame.HEIGHT, this.camera);
         this.stage = new Stage(this.viewport, this.spriteBatch);
         addBackground(backgroundTexture);
     }
 
     private void addBackground(Texture backgroundTexture) {
         Image background = new Image(backgroundTexture);
-        Scaling.scaleActor(background);
         stage.addActor(background);
     }
 

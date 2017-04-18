@@ -14,7 +14,6 @@ import com.badlogic.gdx.utils.Align;
 
 import lowe.mike.snake.util.Assets;
 import lowe.mike.snake.util.GamePreferences;
-import lowe.mike.snake.util.Scaling;
 import lowe.mike.snake.util.ScreenManager;
 import lowe.mike.snake.util.Utils;
 import lowe.mike.snake.world.Level;
@@ -76,10 +75,12 @@ final class SettingsScreen extends BaseScreen {
         table.row();
         Label numberLabel = Utils.createLabel(assets.getMediumFont(), Integer.toString(level));
         ImageButton leftArrowButton = createLeftArrowButton(numberLabel);
-        Scaling.scaleCell(table.add(leftArrowButton).expandX().align(Align.right));
+        table.add(leftArrowButton).expandX().align(Align.right).size(leftArrowButton.getWidth(),
+                leftArrowButton.getHeight());
         table.add(numberLabel).expandX();
         ImageButton rightArrowButton = createRightArrowButton(numberLabel);
-        Scaling.scaleCell(table.add(rightArrowButton).expandX().align(Align.left));
+        table.add(rightArrowButton).expandX().align(Align.left).size(rightArrowButton.getWidth(),
+                rightArrowButton.getHeight());
 
         // add back button
         table.row().padTop(SETTINGS_COMPONENT_SPACING);
