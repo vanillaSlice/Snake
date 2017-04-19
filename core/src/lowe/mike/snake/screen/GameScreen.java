@@ -35,36 +35,37 @@ final class GameScreen extends BaseScreen {
      */
     GameScreen(Assets assets, SpriteBatch spriteBatch, ScreenManager screenManager) {
         super(assets, spriteBatch, screenManager);
+        setBackground();
         Label label = Utils.createLabel(assets.getSmallFont(), "0000");
         label.setPosition(COMPONENT_SPACING, stage.getHeight() - COMPONENT_SPACING * 2.5f
                 - (label.getHeight() / 2));
-        Image gridFrame = new Image(assets.getGridFrameTexture());
+        Image gridFrame = new Image(assets.getGridFrame());
         gridFrame.setPosition(COMPONENT_SPACING, label.getY() - (gridFrame.getHeight() / 2));
         this.stage.addActor(label);
         this.stage.addActor(gridFrame);
 
-        ImageButton rightButton = Utils.createImageButton(assets.getLargeRightArrowTexture(),
-                assets.getLargeRightArrowPressedTexture());
+        ImageButton rightButton = Utils.createImageButton(assets.getLargeRightArrow(),
+                assets.getLargeRightArrowPressed());
         rightButton.setPosition(110f, 50f);
         this.stage.addActor(rightButton);
 
-        ImageButton leftButton = Utils.createImageButton(assets.getLargeLeftArrowTexture(),
-                assets.getLargeLeftArrowPressedTexture());
+        ImageButton leftButton = Utils.createImageButton(assets.getLargeLeftArrow(),
+                assets.getLargeLeftArrowPressed());
         leftButton.setPosition(38f, 50f);
         this.stage.addActor(leftButton);
 
-        ImageButton upButton = Utils.createImageButton(assets.getLargeUpArrowTexture(),
-                assets.getLargeUpArrowPressedTexture());
+        ImageButton upButton = Utils.createImageButton(assets.getLargeUpArrow(),
+                assets.getLargeUpArrowPressed());
         upButton.setPosition(74f, 82f);
         this.stage.addActor(upButton);
 
-        ImageButton downButton = Utils.createImageButton(assets.getLargeDownArrowTexture(),
-                assets.getLargeDownArrowPressedTexture());
+        ImageButton downButton = Utils.createImageButton(assets.getLargeDownArrow(),
+                assets.getLargeDownArrowPressed());
         downButton.setPosition(74f, 18f);
         this.stage.addActor(downButton);
 
-        ImageButton pauseButton = Utils.createImageButton(assets.getPauseTexture(),
-                assets.getPausePressedTexture());
+        ImageButton pauseButton = Utils.createImageButton(assets.getPause(),
+                assets.getPausePressed());
         pauseButton.setPosition(152f, 100f);
         pauseButton.addListener(new InputListener() {
 
@@ -77,6 +78,10 @@ final class GameScreen extends BaseScreen {
         this.stage.addActor(pauseButton);
         this.world = new World(assets, gridFrame.getX(), gridFrame.getY(), gridFrame.getWidth() / 2, gridFrame.getHeight() / 2);
         this.stage.addActor(this.world.getSnake());
+    }
+
+    private void setBackground() {
+        stage.addActor(new Image(assets.getBackground()));
     }
 
     @Override

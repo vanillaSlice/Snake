@@ -17,7 +17,7 @@ public class World {
     private final float height;
 
     public World(Assets assets, float x, float y, float width, float height) {
-        this.snake = new Snake(assets.getSnakeBodyTexture());
+        this.snake = new Snake(assets.getSnakeBody());
         this.snake.setPosition(x, y);
         this.x = x;
         this.y = y;

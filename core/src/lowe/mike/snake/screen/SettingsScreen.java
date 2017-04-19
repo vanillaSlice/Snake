@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -44,9 +45,14 @@ final class SettingsScreen extends BaseScreen {
      */
     SettingsScreen(Assets assets, SpriteBatch spriteBatch, ScreenManager screenManager) {
         super(assets, spriteBatch, screenManager);
+        setBackground();
         this.level = GamePreferences.getLevel();
         Table menu = createMenu();
         this.stage.addActor(menu);
+    }
+
+    private void setBackground() {
+        stage.addActor(new Image(assets.getBackground()));
     }
 
     private Table createMenu() {
@@ -75,12 +81,10 @@ final class SettingsScreen extends BaseScreen {
         table.row();
         Label numberLabel = Utils.createLabel(assets.getMediumFont(), Integer.toString(level));
         ImageButton leftArrowButton = createLeftArrowButton(numberLabel);
-        table.add(leftArrowButton).expandX().align(Align.right).size(leftArrowButton.getWidth(),
-                leftArrowButton.getHeight());
+        table.add(leftArrowButton).expandX().align(Align.right);
         table.add(numberLabel).expandX();
         ImageButton rightArrowButton = createRightArrowButton(numberLabel);
-        table.add(rightArrowButton).expandX().align(Align.left).size(rightArrowButton.getWidth(),
-                rightArrowButton.getHeight());
+        table.add(rightArrowButton).expandX().align(Align.left);
 
         // add back button
         table.row().padTop(SETTINGS_COMPONENT_SPACING);
@@ -130,8 +134,8 @@ final class SettingsScreen extends BaseScreen {
     }
 
     private ImageButton createLeftArrowButton(Label numberLabel) {
-        ImageButton button = Utils.createImageButton(assets.getMediumLeftArrowTexture(),
-                assets.getMediumLeftArrowPressedTexture());
+        ImageButton button = Utils.createImageButton(assets.getMediumLeftArrow(),
+                assets.getMediumLeftArrowPressed());
         addLeftArrowButtonListener(button, numberLabel);
         return button;
     }
@@ -156,8 +160,8 @@ final class SettingsScreen extends BaseScreen {
     }
 
     private ImageButton createRightArrowButton(Label numberLabel) {
-        ImageButton button = Utils.createImageButton(assets.getMediumRightArrowTexture(),
-                assets.getMediumRightArrowPressedTexture());
+        ImageButton button = Utils.createImageButton(assets.getMediumRightArrow(),
+                assets.getMediumRightArrowPressed());
         addRightArrowButtonListener(button, numberLabel);
         return button;
     }

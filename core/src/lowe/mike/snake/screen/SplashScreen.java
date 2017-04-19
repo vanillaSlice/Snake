@@ -2,6 +2,7 @@ package lowe.mike.snake.screen;
 
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 import lowe.mike.snake.util.Assets;
 import lowe.mike.snake.util.ScreenManager;
@@ -22,8 +23,12 @@ public final class SplashScreen extends BaseScreen {
      * @param screenManager the {@link ScreenManager} used to manage game {@link Screen}s
      */
     public SplashScreen(Assets assets, SpriteBatch spriteBatch, ScreenManager screenManager) {
-        // use splash background texture instead of default
-        super(assets, spriteBatch, screenManager, assets.getSplashBackgroundTexture());
+        super(assets, spriteBatch, screenManager);
+        setBackground();
+    }
+
+    private void setBackground() {
+        stage.addActor(new Image(assets.getSplashBackground()));
     }
 
     @Override
@@ -43,7 +48,7 @@ public final class SplashScreen extends BaseScreen {
     @Override
     public void onDispose() {
         // dispose this because it won't be used again
-        assets.disposeSplashBackgroundTexture();
+        assets.disposeSplashBackground();
     }
 
 }

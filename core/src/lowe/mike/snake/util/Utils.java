@@ -79,6 +79,16 @@ public final class Utils {
         return button;
     }
 
+    public static ImageButton createImageButton(TextureRegion up, TextureRegion down) {
+        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
+        style.imageUp = new TextureRegionDrawable(up);
+        style.imageDown = new TextureRegionDrawable(down);
+        style.imageOver = style.imageDown;
+        ImageButton button = new ImageButton(style);
+        button.align(Align.center);
+        return button;
+    }
+
     private static TextureRegionDrawable getTextureRegionDrawable(Texture texture) {
         return new TextureRegionDrawable(new TextureRegion(texture));
     }

@@ -3,6 +3,7 @@ package lowe.mike.snake.screen;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -20,9 +21,6 @@ import lowe.mike.snake.util.Utils;
  */
 final class MainMenuScreen extends BaseScreen {
 
-    private static final String PLAY_BUTTON_TEXT = "Play";
-    private static final String SETTINGS_BUTTON_TEXT = "Settings";
-
     /**
      * Creates a new {@code MainMenuScreen} given {@link Assets}, a {@link SpriteBatch}
      * and a {@link ScreenManager}.
@@ -33,8 +31,13 @@ final class MainMenuScreen extends BaseScreen {
      */
     MainMenuScreen(Assets assets, SpriteBatch spriteBatch, ScreenManager screenManager) {
         super(assets, spriteBatch, screenManager);
+        setBackground();
         Table menu = createMenu();
         this.stage.addActor(menu);
+    }
+
+    private void setBackground() {
+        stage.addActor(new Image(assets.getBackground()));
     }
 
     private Table createMenu() {
@@ -61,7 +64,7 @@ final class MainMenuScreen extends BaseScreen {
     }
 
     private TextButton createPlayButton() {
-        TextButton button = Utils.createTextButton(assets.getMediumFont(), PLAY_BUTTON_TEXT);
+        TextButton button = Utils.createTextButton(assets.getMediumFont(), "Play");
         addPlayButtonListener(button);
         return button;
     }
@@ -89,7 +92,7 @@ final class MainMenuScreen extends BaseScreen {
     }
 
     private TextButton createSettingsButton() {
-        TextButton button = Utils.createTextButton(assets.getMediumFont(), SETTINGS_BUTTON_TEXT);
+        TextButton button = Utils.createTextButton(assets.getMediumFont(), "Settings");
         addSettingsButtonListener(button);
         return button;
     }
