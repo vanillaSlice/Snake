@@ -37,36 +37,68 @@ final class GameScreen extends BaseScreen {
         super(assets, spriteBatch, screenManager);
         setBackground();
         Label label = Utils.createLabel(assets.getSmallFont(), "0000");
-        label.setPosition(COMPONENT_SPACING, stage.getHeight() - COMPONENT_SPACING * 2.5f
-                - (label.getHeight() / 2));
-        Image gridFrame = new Image(assets.getGridFrame());
-        gridFrame.setPosition(COMPONENT_SPACING, label.getY() - (gridFrame.getHeight() / 2));
+        label.setPosition(COMPONENT_SPACING, stage.getHeight() - COMPONENT_SPACING * 2.5f - (label.getHeight() / 2));
+        this.world = new World(assets, COMPONENT_SPACING, 240f, 360f, 360f);
+        this.stage.addActor(this.world.getSnake());
+        this.stage.addActor(new Image(assets.getGameFrame()));
+
         this.stage.addActor(label);
-        this.stage.addActor(gridFrame);
 
         ImageButton rightButton = Utils.createImageButton(assets.getLargeRightArrow(),
                 assets.getLargeRightArrowPressed());
-        rightButton.setPosition(110f, 50f);
+        rightButton.setPosition(220f, 100f);
         this.stage.addActor(rightButton);
+        rightButton.addListener(new InputListener() {
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                world.getSnake().setDirection(Snake.Direction.RIGHT);
+                return true;
+            }
+        });
 
         ImageButton leftButton = Utils.createImageButton(assets.getLargeLeftArrow(),
                 assets.getLargeLeftArrowPressed());
-        leftButton.setPosition(38f, 50f);
+        leftButton.setPosition(76f, 100f);
         this.stage.addActor(leftButton);
+        leftButton.addListener(new InputListener() {
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                world.getSnake().setDirection(Snake.Direction.LEFT);
+                return true;
+            }
+        });
 
         ImageButton upButton = Utils.createImageButton(assets.getLargeUpArrow(),
                 assets.getLargeUpArrowPressed());
-        upButton.setPosition(74f, 82f);
+        upButton.setPosition(148f, 164f);
         this.stage.addActor(upButton);
+        upButton.addListener(new InputListener() {
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                world.getSnake().setDirection(Snake.Direction.UP);
+                return true;
+            }
+        });
 
         ImageButton downButton = Utils.createImageButton(assets.getLargeDownArrow(),
                 assets.getLargeDownArrowPressed());
-        downButton.setPosition(74f, 18f);
+        downButton.setPosition(148f, 36f);
         this.stage.addActor(downButton);
+        downButton.addListener(new InputListener() {
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                world.getSnake().setDirection(Snake.Direction.DOWN);
+                return true;
+            }
+        });
 
         ImageButton pauseButton = Utils.createImageButton(assets.getPause(),
                 assets.getPausePressed());
-        pauseButton.setPosition(152f, 100f);
+        pauseButton.setPosition(304f, 200f);
         pauseButton.addListener(new InputListener() {
 
             @Override
@@ -76,8 +108,6 @@ final class GameScreen extends BaseScreen {
             }
         });
         this.stage.addActor(pauseButton);
-        this.world = new World(assets, gridFrame.getX(), gridFrame.getY(), gridFrame.getWidth() / 2, gridFrame.getHeight() / 2);
-        this.stage.addActor(this.world.getSnake());
     }
 
     private void setBackground() {
@@ -92,14 +122,14 @@ final class GameScreen extends BaseScreen {
 
     private void handleUserInput() {
         Snake snake = world.getSnake();
-        if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && snake.direction != Snake.Direction.DOWN) {
-            snake.direction = Snake.Direction.UP;
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT) && snake.direction != Snake.Direction.LEFT) {
-            snake.direction = Snake.Direction.RIGHT;
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN) && snake.direction != Snake.Direction.UP) {
-            snake.direction = Snake.Direction.DOWN;
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT) && snake.direction != Snake.Direction.RIGHT) {
-            snake.direction = Snake.Direction.LEFT;
+        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
+           snake.setDirection(Snake.Direction.UP);
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
+            snake.setDirection(Snake.Direction.RIGHT);
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
+            snake.setDirection(Snake.Direction.DOWN);
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
+            snake.setDirection(Snake.Direction.LEFT);
         }
     }
 

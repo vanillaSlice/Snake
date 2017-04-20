@@ -1,6 +1,5 @@
 package lowe.mike.snake.world;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -15,7 +14,7 @@ public class Snake extends Image {
         UP, DOWN, LEFT, RIGHT;
     }
 
-    public Direction direction = Direction.RIGHT;
+    private Direction direction = Direction.RIGHT;
     public float x;
     public float y;
     public Vector2 velocity = new Vector2();
@@ -38,6 +37,19 @@ public class Snake extends Image {
             case LEFT:
                 setX(getX() - getWidth());
                 break;
+        }
+    }
+
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public void setDirection(Direction direction) {
+        if (direction == Direction.UP && this.direction != Snake.Direction.DOWN ||
+                direction == Direction.RIGHT && this.direction != Snake.Direction.LEFT ||
+                direction == Direction.DOWN && this.direction != Snake.Direction.UP ||
+                direction == Direction.LEFT && this.direction != Snake.Direction.RIGHT) {
+            this.direction = direction;
         }
     }
 

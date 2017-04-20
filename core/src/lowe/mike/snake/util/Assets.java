@@ -47,7 +47,6 @@ public final class Assets implements Disposable {
     private TextureRegion mediumRightArrowPressed;
     private TextureRegion mediumLeftArrow;
     private TextureRegion mediumLeftArrowPressed;
-    private TextureRegion gridFrame;
     private TextureRegion largeUpArrow;
     private TextureRegion largeUpArrowPressed;
     private TextureRegion largeRightArrow;
@@ -58,6 +57,7 @@ public final class Assets implements Disposable {
     private TextureRegion largeLeftArrowPressed;
     private TextureRegion pause;
     private TextureRegion pausePressed;
+    private TextureRegion gameFrame;
     private TextureRegion snakeBody;
 
     /**
@@ -136,7 +136,6 @@ public final class Assets implements Disposable {
         mediumRightArrowPressed = textureAtlas.findRegion("medium-right-arrow-pressed");
         mediumLeftArrow = textureAtlas.findRegion("medium-left-arrow");
         mediumLeftArrowPressed = textureAtlas.findRegion("medium-left-arrow-pressed");
-        gridFrame = textureAtlas.findRegion("grid-frame");
         largeUpArrow = textureAtlas.findRegion("large-up-arrow");
         largeUpArrowPressed = textureAtlas.findRegion("large-up-arrow-pressed");
         largeRightArrow = textureAtlas.findRegion("large-right-arrow");
@@ -147,6 +146,7 @@ public final class Assets implements Disposable {
         largeLeftArrowPressed = textureAtlas.findRegion("large-left-arrow-pressed");
         pause = textureAtlas.findRegion("pause");
         pausePressed = textureAtlas.findRegion("pause-pressed");
+        gameFrame = textureAtlas.findRegion("game-frame");
         snakeBody = textureAtlas.findRegion("snake-body");
     }
 
@@ -211,13 +211,6 @@ public final class Assets implements Disposable {
      */
     public TextureRegion getMediumLeftArrowPressed() {
         return mediumLeftArrowPressed;
-    }
-
-    /**
-     * @return the grid frame {@link TextureRegion}
-     */
-    public TextureRegion getGridFrame() {
-        return gridFrame;
     }
 
     /**
@@ -288,6 +281,13 @@ public final class Assets implements Disposable {
      */
     public TextureRegion getPausePressed() {
         return pausePressed;
+    }
+
+    /**
+     * @return the game frame {@link TextureRegion}
+     */
+    public TextureRegion getGameFrame() {
+        return gameFrame;
     }
 
     /**
