@@ -27,11 +27,6 @@ import lowe.mike.snake.world.Level;
 final class SettingsScreen extends BaseScreen {
 
     private static final float SETTINGS_COMPONENT_SPACING = COMPONENT_SPACING * 2;
-    private static final String SOUNDS_LABEL_TEXT = "Sounds";
-    private static final String ON_BUTTON_TEXT = "On";
-    private static final String OFF_BUTTON_TEXT = "Off";
-    private static final String LEVEL_LABEL_TEXT = "Level";
-    private static final String BACK_BUTTON_TEXT = "Back";
 
     private int level;
 
@@ -64,7 +59,7 @@ final class SettingsScreen extends BaseScreen {
 
         // add sound label
         table.row();
-        Label soundsLabel = Utils.createLabel(assets.getMediumFont(), SOUNDS_LABEL_TEXT);
+        Label soundsLabel = Utils.createLabel(assets.getMediumFont(), "Sounds");
         table.add(soundsLabel).expandX().colspan(colspan);
 
         // add sound buttons
@@ -74,7 +69,7 @@ final class SettingsScreen extends BaseScreen {
 
         // add level label
         table.row().padTop(SETTINGS_COMPONENT_SPACING);
-        Label levelLabel = Utils.createLabel(assets.getMediumFont(), LEVEL_LABEL_TEXT);
+        Label levelLabel = Utils.createLabel(assets.getMediumFont(), "Level");
         table.add(levelLabel).expandX().colspan(colspan);
 
         // add level buttons
@@ -100,8 +95,8 @@ final class SettingsScreen extends BaseScreen {
 
         // create the buttons
         boolean playSounds = GamePreferences.shouldPlaySounds();
-        TextButton onButton = Utils.createTextButton(assets.getMediumFont(), ON_BUTTON_TEXT);
-        TextButton offButton = Utils.createTextButton(assets.getMediumFont(), OFF_BUTTON_TEXT);
+        TextButton onButton = Utils.createTextButton(assets.getMediumFont(), "On");
+        TextButton offButton = Utils.createTextButton(assets.getMediumFont(), "Off");
         onButton.setChecked(playSounds);
         offButton.setChecked(!playSounds);
         addSoundButtonListener(onButton, true);
@@ -178,7 +173,7 @@ final class SettingsScreen extends BaseScreen {
     }
 
     private TextButton createBackButton() {
-        TextButton button = Utils.createTextButton(assets.getMediumFont(), BACK_BUTTON_TEXT);
+        TextButton button = Utils.createTextButton(assets.getMediumFont(), "Back");
         addBackButtonListener(button);
         return button;
     }

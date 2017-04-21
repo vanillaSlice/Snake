@@ -34,16 +34,16 @@ public class World {
             tick = 0f;
             snake.update(delta);
             // rough calculations -- turn into grid
-            if (snake.getX() < x - snake.getWidth()) {
-                snake.setX(width + x);
+            if (snake.getX() < x) {
+                snake.setX(width + x - snake.getWidth());
             }
-            if (snake.getX() > width + x) {
+            if (snake.getX() >= width + x) {
                 snake.setX(x);
             }
             if (snake.getY() < y) {
-                snake.setY(height + y);
+                snake.setY(height + y - snake.getHeight());
             }
-            if (snake.getY() > height + y) {
+            if (snake.getY() >= height + y) {
                 snake.setY(y);
             }
         } else {

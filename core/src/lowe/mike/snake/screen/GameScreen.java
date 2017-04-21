@@ -38,7 +38,7 @@ final class GameScreen extends BaseScreen {
         setBackground();
         Label label = Utils.createLabel(assets.getSmallFont(), "0000");
         label.setPosition(COMPONENT_SPACING, stage.getHeight() - COMPONENT_SPACING * 2.5f - (label.getHeight() / 2));
-        this.world = new World(assets, COMPONENT_SPACING, 240f, 360f, 360f);
+        this.world = new World(assets, COMPONENT_SPACING, 240f, 320f, 320f);
         this.stage.addActor(this.world.getSnake());
         this.stage.addActor(new Image(assets.getGameFrame()));
 
@@ -123,7 +123,7 @@ final class GameScreen extends BaseScreen {
     private void handleUserInput() {
         Snake snake = world.getSnake();
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-           snake.setDirection(Snake.Direction.UP);
+            snake.setDirection(Snake.Direction.UP);
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
             snake.setDirection(Snake.Direction.RIGHT);
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
