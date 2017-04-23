@@ -2,7 +2,9 @@ package lowe.mike.snake.screen;
 
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -13,11 +15,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 
+import lowe.mike.snake.Constants;
+import lowe.mike.snake.state.GameSettings;
+import lowe.mike.snake.state.GameState;
 import lowe.mike.snake.util.Assets;
-import lowe.mike.snake.util.GamePreferences;
 import lowe.mike.snake.util.ScreenManager;
 import lowe.mike.snake.util.Utils;
-import lowe.mike.snake.world.Level;
 
 /**
  * Settings screen to show settings that the user can change.
@@ -26,81 +29,58 @@ import lowe.mike.snake.world.Level;
  */
 final class SettingsScreen extends BaseScreen {
 
-    private static final float SETTINGS_COMPONENT_SPACING = COMPONENT_SPACING * 2;
-
-    private int level;
+    private static final int COL_SPAN = 3;
 
     /**
-     * Creates a new {@code SettingsScreen} given {@link Assets}, a {@link SpriteBatch}
-     * and a {@link ScreenManager}.
+     * Creates a new {@code SettingsScreen} given the {@link Assets}, the {@link SpriteBatch},
+     * the {@link ScreenManager} and the {@link GameState}.
      *
-     * @param assets        {@link Assets} containing assets used in the {@link Screen}
-     * @param spriteBatch   {@link SpriteBatch} to add sprites to
+     * @param assets        the {@link Assets} containing assets used in the {@link Screen}
+     * @param spriteBatch   the {@link SpriteBatch} to add sprites to
      * @param screenManager the {@link ScreenManager} used to manage game {@link Screen}s
+     * @param gameState     the {@link GameState} containing the current game state
      */
-    SettingsScreen(Assets assets, SpriteBatch spriteBatch, ScreenManager screenManager) {
-        super(assets, spriteBatch, screenManager);
+    SettingsScreen(Assets assets, SpriteBatch spriteBatch, ScreenManager screenManager,
+                   GameState gameState) {
+        super(assets, spriteBatch, screenManager, gameState);
         setBackground();
-        this.level = GamePreferences.getLevel();
-        Table menu = createMenu();
-        this.stage.addActor(menu);
+        addMenu();
     }
 
     private void setBackground() {
         stage.addActor(new Image(assets.getBackground()));
     }
 
-    private Table createMenu() {
-        Table table = new Table();
-        table.setFillParent(true);
-        table.center();
-
-        int colspan = 3;
-
-        // add sound label
-        table.row();
-        Label soundsLabel = Utils.createLabel(assets.getMediumFont(), "Sounds");
-        table.add(soundsLabel).expandX().colspan(colspan);
-
-        // add sound buttons
-        table.row();
-        HorizontalGroup soundButtonGroup = createSoundButtonGroup();
-        table.add(soundButtonGroup).expandX().colspan(colspan);
-
-        // add level label
-        table.row().padTop(SETTINGS_COMPONENT_SPACING);
-        Label levelLabel = Utils.createLabel(assets.getMediumFont(), "Level");
-        table.add(levelLabel).expandX().colspan(colspan);
-
-        // add level buttons
-        table.row();
-        Label numberLabel = Utils.createLabel(assets.getMediumFont(), Integer.toString(level));
-        ImageButton leftArrowButton = createLeftArrowButton(numberLabel);
-        table.add(leftArrowButton).expandX().align(Align.right);
-        table.add(numberLabel).expandX();
-        ImageButton rightArrowButton = createRightArrowButton(numberLabel);
-        table.add(rightArrowButton).expandX().align(Align.left);
-
-        // add back button
-        table.row().padTop(SETTINGS_COMPONENT_SPACING);
-        TextButton backButton = createBackButton();
-        table.add(backButton).expandX().colspan(colspan);
-
-        return table;
+    private void addMenu() {
+        Table menu = Utils.createMenu();
+        addMusicLabel(menu);
+        addMusicButtons(menu);
+        addLevelLabel(menu);
+        addLevelButtons(menu);
+        addBackButton(menu);
+        stage.addActor(menu);
     }
 
-    private HorizontalGroup createSoundButtonGroup() {
-        HorizontalGroup group = new HorizontalGroup();
-        group.space(SETTINGS_COMPONENT_SPACING);
+    private void addMusicLabel(Table menu) {
+        menu.row();
+        Label musicLabel = Utils.createTextLabel(assets.getMediumFont(), "Music");
+        menu.add(musicLabel).expandX().colspan(COL_SPAN);
+    }
+
+    private void addMusicButtons(Table menu) {
+        menu.row().padBottom(COMPONENT_SPACING);
+        Group musicButtonGroup = createMusicButtonGroup();
+        menu.add(musicButtonGroup).expandX().colspan(COL_SPAN);
+    }
+
+    private Group createMusicButtonGroup() {
+        HorizontalGroup horizontalGroup = new HorizontalGroup();
+        horizontalGroup.space(COMPONENT_SPACING * 2);
 
         // create the buttons
-        boolean playSounds = GamePreferences.shouldPlaySounds();
-        TextButton onButton = Utils.createTextButton(assets.getMediumFont(), "On");
-        TextButton offButton = Utils.createTextButton(assets.getMediumFont(), "Off");
-        onButton.setChecked(playSounds);
-        offButton.setChecked(!playSounds);
-        addSoundButtonListener(onButton, true);
-        addSoundButtonListener(offButton, false);
+        boolean shouldPlayMusic = GameSettings.shouldPlayMusic();
+        TextButton onButton = Utils.createCheckableTextButton(assets.getMediumFont(), "On");
+        TextButton offButton = Utils.createCheckableTextButton(assets.getMediumFont(), "Off");
 
         // add to button group
         ButtonGroup<TextButton> buttonGroup = new ButtonGroup<TextButton>();
@@ -109,84 +89,101 @@ final class SettingsScreen extends BaseScreen {
         buttonGroup.add(offButton);
 
         // add to horizontal group
-        group.addActor(onButton);
-        group.addActor(offButton);
+        horizontalGroup.addActor(onButton);
+        horizontalGroup.addActor(offButton);
 
-        return group;
+        // check which button should be checked
+        onButton.setChecked(shouldPlayMusic);
+        offButton.setChecked(!shouldPlayMusic);
+
+        // add button listeners
+        addMusicButtonListener(onButton, true);
+        addMusicButtonListener(offButton, false);
+
+        return horizontalGroup;
     }
 
-    private void addSoundButtonListener(final TextButton button, final boolean playSounds) {
-        button.addListener(new ChangeListener() {
+    private void addMusicButtonListener(final TextButton musicButton,
+                                        final boolean shouldPlayMusic) {
+        musicButton.addListener(new ChangeListener() {
 
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if (button.isChecked()) {
-                    GamePreferences.setPlaySounds(playSounds);
+                if (musicButton.isChecked()) {
+                    GameSettings.setShouldPlayMusic(shouldPlayMusic);
+                    Utils.playMusic(assets.getMusic(), shouldPlayMusic);
                 }
             }
 
         });
     }
 
-    private ImageButton createLeftArrowButton(Label numberLabel) {
-        ImageButton button = Utils.createImageButton(assets.getMediumLeftArrow(),
-                assets.getMediumLeftArrowPressed());
-        addLeftArrowButtonListener(button, numberLabel);
-        return button;
+    private void addLevelLabel(Table menu) {
+        menu.row().padTop(COMPONENT_SPACING);
+        Label levelLabel = Utils.createTextLabel(assets.getMediumFont(), "Level");
+        menu.add(levelLabel).expandX().colspan(COL_SPAN);
     }
 
-    private void addLeftArrowButtonListener(final ImageButton button, final Label numberLabel) {
-        button.addListener(new ChangeListener() {
+    private void addLevelButtons(Table menu) {
+        menu.row().padBottom(COMPONENT_SPACING);
+        Label numberLabel = Utils.createNumberLabel(assets.getMediumFont(),
+                GameSettings.getLevel());
+
+        // create left arrow
+        ImageButton leftArrowButton = createArrowButton(
+                assets.getSmallLeftArrow(), assets.getSmallLeftArrowPressed(), numberLabel, -1);
+        menu.add(leftArrowButton).expandX().align(Align.right);
+
+        // add number label in the middle
+        menu.add(numberLabel).expandX();
+
+        // create right arrow
+        ImageButton rightArrowButton = createArrowButton(
+                assets.getSmallRightArrow(), assets.getSmallRightArrowPressed(), numberLabel, 1);
+        menu.add(rightArrowButton).expandX().align(Align.left);
+    }
+
+    private ImageButton createArrowButton(TextureRegion up, TextureRegion down, Label numberLabel,
+                                          int levelIncrement) {
+        ImageButton arrowButton = Utils.createImageButton(up, down);
+        addArrowButtonListener(arrowButton, numberLabel, levelIncrement);
+        return arrowButton;
+    }
+
+    private void addArrowButtonListener(ImageButton arrowButton, final Label numberLabel,
+                                        final int levelIncrement) {
+        arrowButton.addListener(new ChangeListener() {
 
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                updateLevel(level - 1, numberLabel);
+                int level = GameSettings.getLevel() + levelIncrement;
+                if (level >= Constants.MIN_LEVEL && level <= Constants.MAX_LEVEL) {
+                    GameSettings.setLevel(level);
+                    Utils.updateNumberLabel(numberLabel, level);
+                }
             }
 
         });
     }
 
-    private void updateLevel(int level, Label numberLabel) {
-        if (Level.isValid(level)) {
-            this.level = level;
-            numberLabel.setText(Integer.toString(this.level));
-            GamePreferences.setLevel(this.level);
-        }
-    }
-
-    private ImageButton createRightArrowButton(Label numberLabel) {
-        ImageButton button = Utils.createImageButton(assets.getMediumRightArrow(),
-                assets.getMediumRightArrowPressed());
-        addRightArrowButtonListener(button, numberLabel);
-        return button;
-    }
-
-    private void addRightArrowButtonListener(final ImageButton button, final Label numberLabel) {
-        button.addListener(new ChangeListener() {
-
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                updateLevel(level + 1, numberLabel);
-            }
-
-        });
+    private void addBackButton(Table menu) {
+        menu.row().padTop(COMPONENT_SPACING);
+        TextButton backButton = createBackButton();
+        menu.add(backButton).expandX().colspan(COL_SPAN);
     }
 
     private TextButton createBackButton() {
-        TextButton button = Utils.createTextButton(assets.getMediumFont(), "Back");
-        addBackButtonListener(button);
-        return button;
+        TextButton backButton = Utils.createTextButton(assets.getMediumFont(), "Back");
+        addBackButtonListener(backButton);
+        return backButton;
     }
 
-    private void addBackButtonListener(final TextButton button) {
-        button.addListener(new ChangeListener() {
+    private void addBackButtonListener(TextButton backButton) {
+        backButton.addListener(new ChangeListener() {
 
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if (button.isChecked()) {
-                    screenManager.switchToPreviousScreen();
-                    button.setChecked(false);
-                }
+                screenManager.switchToPreviousScreen();
             }
 
         });

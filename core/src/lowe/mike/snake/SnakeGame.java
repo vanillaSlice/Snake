@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import lowe.mike.snake.screen.SplashScreen;
+import lowe.mike.snake.state.GameState;
 import lowe.mike.snake.util.Assets;
 import lowe.mike.snake.util.ScreenManager;
 
@@ -14,10 +15,6 @@ import lowe.mike.snake.util.ScreenManager;
  */
 public final class SnakeGame extends Game {
 
-    public static final String TITLE = "Snake";
-    public static final int WIDTH = 360;
-    public static final int HEIGHT = 640;
-
     private Assets assets;
     private SpriteBatch spriteBatch;
     private ScreenManager screenManager;
@@ -27,7 +24,8 @@ public final class SnakeGame extends Game {
         assets = new Assets();
         spriteBatch = new SpriteBatch();
         screenManager = new ScreenManager(this);
-        screenManager.setScreen(new SplashScreen(assets, spriteBatch, screenManager));
+        screenManager.setScreen(new SplashScreen(assets, spriteBatch, screenManager,
+                new GameState()));
     }
 
     @Override

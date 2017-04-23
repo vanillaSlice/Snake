@@ -4,6 +4,7 @@ import com.badlogic.gdx.Files;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
+import lowe.mike.snake.Constants;
 import lowe.mike.snake.SnakeGame;
 
 /**
@@ -24,9 +25,9 @@ public final class Snake {
 
     private static LwjglApplicationConfiguration initialiseConfig() {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.title = SnakeGame.TITLE;
-        config.width = SnakeGame.WIDTH;
-        config.height = SnakeGame.HEIGHT;
+        config.title = Constants.GAME_TITLE;
+        config.width = Constants.GAME_WIDTH;
+        config.height = Constants.GAME_HEIGHT;
         addIcons(config);
         return config;
     }

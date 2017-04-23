@@ -1,4 +1,3 @@
-
 textures.png
 size: 1024,1024
 format: RGBA8888
@@ -9,6 +8,20 @@ background
   xy: 2, 238
   size: 360, 640
   orig: 360, 640
+  offset: 0, 0
+  index: -1
+bonus-food
+  rotate: false
+  xy: 134, 182
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+food
+  rotate: false
+  xy: 172, 220
+  size: 16, 16
+  orig: 16, 16
   offset: 0, 0
   index: -1
 game-frame
@@ -74,42 +87,42 @@ large-up-arrow-pressed
   orig: 64, 64
   offset: 0, 0
   index: -1
-medium-left-arrow
+pause
   rotate: false
   xy: 134, 200
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
-medium-left-arrow-pressed
+pause-pressed
   rotate: false
   xy: 726, 710
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
-medium-right-arrow
+small-left-arrow
   rotate: false
   xy: 792, 776
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
-medium-right-arrow-pressed
+small-left-arrow-pressed
   rotate: false
   xy: 858, 842
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
-pause
+small-right-arrow
   rotate: false
   xy: 2, 2
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
-pause-pressed
+small-right-arrow-pressed
   rotate: false
   xy: 68, 68
   size: 36, 36
@@ -118,7 +131,21 @@ pause-pressed
   index: -1
 snake-body
   rotate: false
-  xy: 134, 182
+  xy: 726, 692
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+snake-head-closed
+  rotate: false
+  xy: 764, 730
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+snake-head-open
+  rotate: false
+  xy: 792, 758
   size: 16, 16
   orig: 16, 16
   offset: 0, 0

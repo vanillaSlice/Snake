@@ -10,7 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import lowe.mike.snake.SnakeGame;
+import lowe.mike.snake.Constants;
+import lowe.mike.snake.state.GameState;
 import lowe.mike.snake.util.Assets;
 import lowe.mike.snake.util.ScreenManager;
 
@@ -26,25 +27,29 @@ class BaseScreen extends ScreenAdapter {
     final Assets assets;
     final SpriteBatch spriteBatch;
     final ScreenManager screenManager;
+    final GameState gameState;
     final Stage stage;
 
     private final OrthographicCamera camera = new OrthographicCamera();
     private final Viewport viewport;
 
     /**
-     * Creates a new {@code BaseScreen} given {@link Assets}, a {@link SpriteBatch}
-     * and a {@link ScreenManager}.
+     * Creates a new {@code BaseScreen} given the {@link Assets}, the {@link SpriteBatch},
+     * the {@link ScreenManager} and the {@link GameState}.
      *
-     * @param assets        {@link Assets} containing assets used in the {@link Screen}
-     * @param spriteBatch   {@link SpriteBatch} to add sprites to
+     * @param assets        the {@link Assets} containing assets used in the {@link Screen}
+     * @param spriteBatch   the {@link SpriteBatch} to add sprites to
      * @param screenManager the {@link ScreenManager} used to manage game {@link Screen}s
+     * @param gameState     the {@link GameState} containing the current game state
      */
-    BaseScreen(Assets assets, SpriteBatch spriteBatch, ScreenManager screenManager) {
+    BaseScreen(Assets assets, SpriteBatch spriteBatch, ScreenManager screenManager,
+               GameState gameState) {
         this.assets = assets;
         this.spriteBatch = spriteBatch;
         this.screenManager = screenManager;
+        this.gameState = gameState;
         this.camera.setToOrtho(false);
-        this.viewport = new FitViewport(SnakeGame.WIDTH, SnakeGame.HEIGHT, this.camera);
+        this.viewport = new FitViewport(Constants.GAME_WIDTH, Constants.GAME_HEIGHT, this.camera);
         this.stage = new Stage(this.viewport, this.spriteBatch);
     }
 
@@ -61,7 +66,6 @@ class BaseScreen extends ScreenAdapter {
     @Override
     public final void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        Gdx.gl.glClearColor(0, 0, 0, 0);
         update(delta);
         spriteBatch.setProjectionMatrix(camera.combined);
         stage.act(delta);
