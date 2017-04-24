@@ -43,7 +43,7 @@ final class GameScreen extends BaseScreen {
         super(assets, spriteBatch, screenManager, gameState);
         setBackground();
         this.scoreLabel = createScoreLabel();
-        this.world = new World(assets, COMPONENT_SPACING, 240f, 320f, 320f);
+        this.world = new World(assets, COMPONENT_SPACING, 240f, 320f, 320f, stage);
         this.stage.addActor(this.world.getSnake());
         this.stage.addActor(this.world.food);
         this.stage.addActor(new Image(assets.getGameFrame()));

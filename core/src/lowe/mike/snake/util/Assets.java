@@ -57,12 +57,7 @@ public final class Assets implements Disposable {
     private TextureRegion smallLeftArrowPressed;
     private TextureRegion pause;
     private TextureRegion pausePressed;
-    private TextureRegion snakeHeadOpen;
-    private TextureRegion snakeHeadClosed;
-    private TextureRegion snakeBody;
-    private TextureRegion snakeTail;
-    private TextureRegion food;
-    private TextureRegion bonusFood;
+    private TextureRegion block;
 
     /**
      * Creates a new {@code Assets} instance.
@@ -140,9 +135,6 @@ public final class Assets implements Disposable {
 
     private void loadTextureRegions() {
         TextureAtlas textureAtlas = assetManager.get(TEXTURE_ATLAS_ASSET_DESCRIPTOR);
-        // apply smoothing filters
-        textureAtlas.getTextures().first().setFilter(Texture.TextureFilter.Linear,
-                Texture.TextureFilter.Linear);
         background = textureAtlas.findRegion("background");
         gameFrame = textureAtlas.findRegion("game-frame");
         largeUpArrow = textureAtlas.findRegion("large-up-arrow");
@@ -159,12 +151,7 @@ public final class Assets implements Disposable {
         smallLeftArrowPressed = textureAtlas.findRegion("small-left-arrow-pressed");
         pause = textureAtlas.findRegion("pause");
         pausePressed = textureAtlas.findRegion("pause-pressed");
-        snakeHeadOpen = textureAtlas.findRegion("snake-head-open");
-        snakeHeadClosed = textureAtlas.findRegion("snake-head-closed");
-        snakeBody = textureAtlas.findRegion("snake-body");
-        snakeTail = snakeHeadClosed;
-        food = textureAtlas.findRegion("food");
-        bonusFood = textureAtlas.findRegion("bonus-food");
+        block = textureAtlas.findRegion("block");
     }
 
     /**
@@ -315,45 +302,10 @@ public final class Assets implements Disposable {
     }
 
     /**
-     * @return the snake head open {@link TextureRegion}
+     * @return the block {@link TextureRegion}
      */
-    public TextureRegion getSnakeHeadOpen() {
-        return snakeHeadOpen;
-    }
-
-    /**
-     * @return the snake head closed {@link TextureRegion}
-     */
-    public TextureRegion getSnakeHeadClosed() {
-        return snakeHeadClosed;
-    }
-
-    /**
-     * @return the snake body {@link TextureRegion}
-     */
-    public TextureRegion getSnakeBody() {
-        return snakeBody;
-    }
-
-    /**
-     * @return the snake tail {@link TextureRegion}
-     */
-    public TextureRegion getSnakeTail() {
-        return snakeTail;
-    }
-
-    /**
-     * @return the food {@link TextureRegion}
-     */
-    public TextureRegion getFood() {
-        return food;
-    }
-
-    /**
-     * @return the bonus food {@link TextureRegion}
-     */
-    public TextureRegion getBonusFood() {
-        return bonusFood;
+    public TextureRegion getBlock() {
+        return block;
     }
 
     /**

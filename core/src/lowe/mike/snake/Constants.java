@@ -22,8 +22,8 @@ public final class Constants {
     public static final int MEDIUM_FONT_SIZE = 36;
     public static final int SMALL_FONT_SIZE = 28;
     public static final float MUSIC_VOLUME = .2f;
-    public static final Color PRIMARY_FONT_COLOR = new Color(0x181818ff);
-    public static final Color SECONDARY_FONT_COLOR = new Color(0x4a4a4aff);
+    public static final Color PRIMARY_FONT_COLOR = new Color(0xffffffff);
+    public static final Color SECONDARY_FONT_COLOR = new Color(0x727272ff);
     public static final int MIN_LEVEL = 1;
     public static final int MAX_LEVEL = 9;
     public static final float TICK_INTERVAL_INCREMENT = .05f;

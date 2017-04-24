@@ -1,8 +1,7 @@
 package lowe.mike.snake.world;
 
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
@@ -22,53 +21,47 @@ public class Snake extends Image {
 
     private Direction lastDirection = Direction.RIGHT;
     private Direction direction = Direction.RIGHT;
-    public float x;
-    public float y;
-    boolean isOpen;
-    public Vector2 velocity = new Vector2();
     public Array<Image> bodyparts = new Array<Image>();
-    private final TextureRegion body;
 
-    public Snake(TextureRegion open, TextureRegion closed, TextureRegion body) {
-        super(open);
-        this.open = new TextureRegionDrawable(open);
-        this.closed = new TextureRegionDrawable(closed);
-        this.body = body;
+    public Snake(TextureRegion body, Stage stage) {
+        super(body);
         setOrigin(getWidth() / 2, getHeight() / 2);
 
         for (int i = 0; i < 10; i++) {
-            bodyparts.add(new Image(body));
+            Image bodyPart = new Image(body);
+            bodyparts.add(bodyPart);
+            stage.addActor(bodyPart);
         }
     }
 
     public void update(float delta) {
         for (int i = 9; i >= 1; i--) {
-            float x = bodyparts.get(i - 1).getX();
-            float y = bodyparts.get(i - 1).getY();
+            int x = (int) bodyparts.get(i - 1).getX();
+            int y = (int) bodyparts.get(i - 1).getY();
             if (bodyparts.get(i).getX() != x || bodyparts.get(i).getY() != y) {
                 bodyparts.get(i).setPosition(x, y);
             }
         }
-        bodyparts.first().setPosition(getX(), getY());
+        bodyparts.first().setPosition((int) getX(), (int) getY());
 
         switch (direction) {
             case UP:
-                setY(getY() + getHeight());
+                setY((int) (getY() + getHeight()));
                 setRotation(0);
                 lastDirection = Direction.UP;
                 break;
             case RIGHT:
-                setX(getX() + getWidth());
+                setX((int) (getX() + getWidth()));
                 setRotation(270);
                 lastDirection = Direction.RIGHT;
                 break;
             case DOWN:
-                setY(getY() - getHeight());
+                setY((int) (getY() - getHeight()));
                 setRotation(180);
                 lastDirection = Direction.DOWN;
                 break;
             case LEFT:
-                setX(getX() - getWidth());
+                setX((int) (getX() - getWidth()));
                 setRotation(90);
                 lastDirection = Direction.LEFT;
                 break;
@@ -86,14 +79,6 @@ public class Snake extends Image {
                 direction == Direction.DOWN && lastDirection != Snake.Direction.UP ||
                 direction == Direction.LEFT && lastDirection != Snake.Direction.RIGHT) {
             this.direction = direction;
-        }
-    }
-
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        super.draw(batch, parentAlpha);
-        for (Image image : bodyparts) {
-            image.draw(batch, parentAlpha);
         }
     }
 }
