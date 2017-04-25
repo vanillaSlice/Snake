@@ -134,7 +134,8 @@ final class SettingsScreen extends BaseScreen {
         // create left arrow
         ImageButton leftArrowButton = createArrowButton(
                 assets.getSmallLeftArrow(), assets.getSmallLeftArrowPressed(), numberLabel, -1);
-        menu.add(leftArrowButton).width(width).align(Align.right);
+        leftArrowButton.align(Align.right);
+        menu.add(leftArrowButton).width(width);
 
         // add number label in the middle
         menu.add(numberLabel).width(width);
@@ -142,7 +143,8 @@ final class SettingsScreen extends BaseScreen {
         // create right arrow
         ImageButton rightArrowButton = createArrowButton(
                 assets.getSmallRightArrow(), assets.getSmallRightArrowPressed(), numberLabel, 1);
-        menu.add(rightArrowButton).width(width).align(Align.left);
+        rightArrowButton.align(Align.left);
+        menu.add(rightArrowButton).width(width);
     }
 
     private ImageButton createArrowButton(TextureRegion up, TextureRegion down, Label numberLabel,
