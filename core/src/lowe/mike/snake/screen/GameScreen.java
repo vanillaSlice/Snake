@@ -43,7 +43,7 @@ final class GameScreen extends BaseScreen {
         super(assets, spriteBatch, screenManager, gameState);
         setBackground();
         this.scoreLabel = createScoreLabel();
-        this.world = new World(assets, COMPONENT_SPACING, 240f, 320f, 320f, stage);
+        this.world = new World(assets, COMPONENT_SPACING, 240f, 320f, 320f, stage, gameState);
         this.stage.addActor(this.world.getSnake());
         this.stage.addActor(this.world.food);
         this.stage.addActor(new Image(assets.getGameFrame()));
@@ -154,6 +154,8 @@ final class GameScreen extends BaseScreen {
     private void updateInRunningState(float delta) {
         world.update(delta);
         handleUserInput();
+        scoreLabel.setText(String.format("%04d", gameState.getCurrentScore()));
+        scoreLabel.pack();
     }
 
     private void handleUserInput() {

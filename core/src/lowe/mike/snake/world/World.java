@@ -1,11 +1,13 @@
 package lowe.mike.snake.world;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
 
 import lowe.mike.snake.Constants;
+import lowe.mike.snake.state.GameState;
 import lowe.mike.snake.util.Assets;
 
 /**
@@ -21,8 +23,10 @@ public final class World {
     private final float width;
     private final float height;
     public final Image food;
+    private final GameState gameState;
+    private int level;
 
-    public World(Assets assets, float x, float y, float width, float height, Stage stage) {
+    public World(Assets assets, float x, float y, float width, float height, Stage stage, GameState gameState) {
         this.snake = new Snake(assets.getBlock(), stage);
         this.snake.setPosition(x, y);
         this.x = x;
@@ -31,10 +35,12 @@ public final class World {
         this.height = height;
         this.food = new Image(assets.getBlock());
         this.food.setAlign(Align.center);
+        this.gameState = gameState;
         setFoodPosition();
     }
 
     public void setLevel(int level) {
+        this.level = level;
         tickInterval = Math.abs(Constants.MAX_LEVEL + 1 - level) * Constants.TICK_INTERVAL_INCREMENT;
     }
 
@@ -60,6 +66,7 @@ public final class World {
             }
             if (snake.getY() == food.getY() && snake.getX() == food.getX()) {
                 setFoodPosition();
+                gameState.setCurrentScore(gameState.getCurrentScore() + level);
             }
         } else {
             tick += delta;
