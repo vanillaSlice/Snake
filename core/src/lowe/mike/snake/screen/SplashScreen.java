@@ -1,6 +1,5 @@
 package lowe.mike.snake.screen;
 
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
@@ -18,7 +17,7 @@ public final class SplashScreen extends BaseScreen {
      * Creates a new {@code SplashScreen} given the {@link Assets}, the {@link SpriteBatch},
      * the {@link ScreenManager}.
      *
-     * @param spriteBatch   the {@link SpriteBatch} to add sprites to
+     * @param spriteBatch the {@link SpriteBatch} to add sprites to
      */
     public SplashScreen(SpriteBatch spriteBatch) {
         super(spriteBatch);

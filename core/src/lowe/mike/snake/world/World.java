@@ -14,40 +14,33 @@ import lowe.mike.snake.util.State;
  */
 public final class World {
 
-    public static final int WIDTH = 320;
-    public static final int HEIGHT = 320;
-    public static final int GRID_CELL_WIDTH = 16;
-    public static final int GRID_CELL_HEIGHT = 16;
-    public static final float TICK_INTERVAL_INCREMENT = .075f;
-    public static final int BONUS_FOOD_APPEARANCE_INTERVAL = 5;
-    public static final int BONUS_FOOD_TICKS = 20;
+    static final Rectangle BOUNDS = new Rectangle(20f, 240f, 320f, 320f);
+    static final int GRID_CELL_WIDTH = 16;
+    static final int GRID_CELL_HEIGHT = 16;
 
-    private final Rectangle bounds;
-    private final int rows;
-    private final int columns;
+    private static final int ROWS = 20;
+    private static final int COLUMNS = 20;
+    private static final float TICK_INTERVAL_INCREMENT = .075f;
+    private static final int BONUS_FOOD_APPEARANCE_INTERVAL = 5;
+    private static final int BONUS_FOOD_TICKS = 20;
+
     private final Stage stage;
     private final Snake snake;
     private final Food food;
     private final BonusFood bonusFood;
-    private float tickInterval;
     private float tick;
-    private int level;
     private int eaten;
-    private int nextBonusRound;
-    private int bonusTicks;
+    private int nextBonusFoodAppearance;
+    private int bonusFoodTicksRemaining;
 
     /**
      * Creates a new {@code World} instance.
      *
-     * @param bounds the {@link Rectangle} bounds that describe the world
-     * @param stage  the {@link Stage} to add {@link Actor}s to
+     * @param stage the {@link Stage} to add {@link Actor}s to
      */
-    public World(Rectangle bounds, Stage stage) {
-        this.bounds = bounds;
-        this.rows = MathUtils.ceil(this.bounds.height / GRID_CELL_HEIGHT);
-        this.columns = MathUtils.ceil(this.bounds.width / GRID_CELL_WIDTH);
+    public World(Stage stage) {
         this.stage = stage;
-        this.snake = new Snake(this.bounds);
+        this.snake = new Snake();
         this.food = new Food();
         this.bonusFood = new BonusFood();
         this.stage.addActor(this.snake);
@@ -56,19 +49,21 @@ public final class World {
     }
 
     private void initialise() {
+        snake.reset();
         setRandomPosition(food);
+        bonusFood.remove();
         tick = 0f;
         eaten = 0;
-        nextBonusRound = BONUS_FOOD_APPEARANCE_INTERVAL;
-        bonusTicks = 0;
+        nextBonusFoodAppearance = BONUS_FOOD_APPEARANCE_INTERVAL;
+        bonusFoodTicksRemaining = 0;
     }
 
     private void setRandomPosition(Food food) {
         float x;
         float y;
         do {
-            x = (MathUtils.random(columns - 1) * GRID_CELL_WIDTH) + bounds.x;
-            y = (MathUtils.random(rows - 1) * GRID_CELL_HEIGHT) + bounds.y;
+            x = (MathUtils.random(COLUMNS - 1) * GRID_CELL_WIDTH) + BOUNDS.x;
+            y = (MathUtils.random(ROWS - 1) * GRID_CELL_HEIGHT) + BOUNDS.y;
         } while (isPositionOccupied(x, y));
         food.setPosition(x, y);
     }
@@ -94,70 +89,60 @@ public final class World {
     }
 
     /**
-     * Resets the world to its initial state.
+     * Resets this {@code World} to its initial state.
      */
     public void reset() {
         initialise();
-        snake.reset();
-        bonusFood.remove();
     }
 
     /**
-     * @return the number of bonus ticks
+     * @return the number of bonus ticks remaining
      */
-    public int getBonusTicks() {
-        return bonusTicks;
+    public int getBonusFoodTicksRemaining() {
+        return bonusFoodTicksRemaining;
     }
 
     /**
-     * @param level the level to play the game in
-     */
-    public void setLevel(int level) {
-        this.level = level;
-        tickInterval = (Level.MAXIMUM + 1 - this.level) *
-                TICK_INTERVAL_INCREMENT;
-    }
-
-    /**
-     * Set the snake's direction to go up, if possible.
+     * Set the {@link Snake}'s direction to go up, if possible.
      */
     public void setSnakeDirectionUp() {
         snake.setCurrentDirection(Snake.Direction.UP);
     }
 
     /**
-     * Set the snake's direction to go right, if possible.
+     * Set the {@link Snake}'s direction to go right, if possible.
      */
     public void setSnakeDirectionRight() {
         snake.setCurrentDirection(Snake.Direction.RIGHT);
     }
 
     /**
-     * Set the snake's direction to go down, if possible.
+     * Set the {@link Snake}'s direction to go down, if possible.
      */
     public void setSnakeDirectionDown() {
         snake.setCurrentDirection(Snake.Direction.DOWN);
     }
 
     /**
-     * Set the snake's direction to go left, if possible.
+     * Set the {@link Snake}'s direction to go left, if possible.
      */
     public void setSnakeDirectionLeft() {
         snake.setCurrentDirection(Snake.Direction.LEFT);
     }
 
     /**
-     * Updates the world's state.
+     * Updates this {@code World}'s state.
      *
      * @param delta time in seconds since the last frame
      */
     public void update(float delta) {
+        float tickInterval = (Level.MAXIMUM + 1 - State.getLevel()) * TICK_INTERVAL_INCREMENT;
         if (tick >= tickInterval) {
             tick -= tickInterval;
             snake.updatePositionAndState();
             checkSnakeAteFood();
             checkSnakeAteBonusFood();
-            checkBonusFood();
+            updateBonusFoodAppearance();
         } else {
             tick += delta;
         }
@@ -176,7 +161,7 @@ public final class World {
     private void checkSnakeAteFood() {
         if (isFoodOccupyingPosition(snake.getHead().getX(), snake.getHead().getY())) {
             setRandomPosition(food);
-            State.setCurrentScore(State.getCurrentScore() + level);
+            State.setCurrentScore(State.getCurrentScore() + State.getLevel());
             snake.addBodyPart();
             eaten++;
         }
@@ -184,24 +169,31 @@ public final class World {
 
     private void checkSnakeAteBonusFood() {
         if (isBonusFoodOccupyingPosition(snake.getHead().getX(), snake.getHead().getY())) {
-            State.setCurrentScore(State.getCurrentScore() + bonusTicks);
+            State.setCurrentScore(State.getCurrentScore() + bonusFoodTicksRemaining);
             snake.addBodyPart();
-            bonusFood.remove();
-            nextBonusRound += BONUS_FOOD_APPEARANCE_INTERVAL;
+            removeBonusFood();
         }
     }
 
-    private void checkBonusFood() {
-        if (isBonusFoodShowing() && bonusTicks <= 0) {
-            bonusFood.remove();
-            nextBonusRound += BONUS_FOOD_APPEARANCE_INTERVAL;
+    private void removeBonusFood() {
+        bonusFood.remove();
+        nextBonusFoodAppearance += BONUS_FOOD_APPEARANCE_INTERVAL;
+    }
+
+    private void updateBonusFoodAppearance() {
+        if (isBonusFoodShowing() && bonusFoodTicksRemaining <= 0) {
+            removeBonusFood();
         } else if (isBonusFoodShowing()) {
-            bonusTicks--;
-        } else if (!isBonusFoodShowing() && eaten == nextBonusRound) {
-            stage.addActor(bonusFood);
-            bonusTicks = BONUS_FOOD_TICKS;
-            setRandomPosition(bonusFood);
+            bonusFoodTicksRemaining--;
+        } else if (!isBonusFoodShowing() && eaten == nextBonusFoodAppearance) {
+            addBonusFood();
         }
+    }
+
+    private void addBonusFood() {
+        stage.addActor(bonusFood);
+        bonusFoodTicksRemaining = BONUS_FOOD_TICKS;
+        setRandomPosition(bonusFood);
     }
 
 }

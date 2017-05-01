@@ -1,7 +1,6 @@
 package lowe.mike.snake.world;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -21,13 +20,12 @@ final class Snake extends Actor {
     private static final int NUMBER_OF_FLASHES = 10;
 
     /**
-     * Directions the snake can travel.
+     * Directions the {@code Snake} can travel.
      */
     enum Direction {
         UP, RIGHT, DOWN, LEFT
     }
 
-    private final Rectangle bounds;
     private final Image head;
     private final Array<Image> bodyParts = new Array<Image>();
     private Direction currentDirection = Direction.RIGHT;
@@ -39,17 +37,14 @@ final class Snake extends Actor {
 
     /**
      * Creates a new {@code Snake} instance.
-     *
-     * @param bounds the {@link Rectangle} bounds that make up the world the {@code Snake} is in
      */
-    Snake(Rectangle bounds) {
-        this.bounds = bounds;
+    Snake() {
         this.head = new Image(Assets.getBlock());
         initialise();
     }
 
     private void initialise() {
-        head.setPosition(bounds.x, bounds.y);
+        head.setPosition(World.BOUNDS.x, World.BOUNDS.y);
         resetBodyParts();
         currentDirection = Direction.RIGHT;
         lastDirection = currentDirection;
@@ -136,14 +131,14 @@ final class Snake extends Actor {
     }
 
     private void ensurePositionIsInBounds(Vector2 position) {
-        if (position.x < bounds.x) {
-            position.x = bounds.width + bounds.x - World.GRID_CELL_WIDTH;
-        } else if (position.x >= bounds.width + bounds.x) {
-            position.x = bounds.x;
-        } else if (position.y < bounds.y) {
-            position.y = bounds.height + bounds.y - World.GRID_CELL_HEIGHT;
-        } else if (position.y >= bounds.height + bounds.y) {
-            position.y = bounds.y;
+        if (position.x < World.BOUNDS.x) {
+            position.x = World.BOUNDS.width + World.BOUNDS.x - World.GRID_CELL_WIDTH;
+        } else if (position.x >= World.BOUNDS.width + World.BOUNDS.x) {
+            position.x = World.BOUNDS.x;
+        } else if (position.y < World.BOUNDS.y) {
+            position.y = World.BOUNDS.height + World.BOUNDS.y - World.GRID_CELL_HEIGHT;
+        } else if (position.y >= World.BOUNDS.height + World.BOUNDS.y) {
+            position.y = World.BOUNDS.y;
         }
     }
 
@@ -178,9 +173,7 @@ final class Snake extends Actor {
             currentBodyPart.setPosition(nextBodyPart.getX(), nextBodyPart.getY());
         }
         // make sure first body part moves to head position
-        if (bodyParts.size > 0) {
-            bodyParts.first().setPosition(head.getX(), head.getY());
-        }
+        bodyParts.first().setPosition(head.getX(), head.getY());
         // update the head position
         head.setPosition(nextHeadPosition.x, nextHeadPosition.y);
     }

@@ -1,6 +1,5 @@
 package lowe.mike.snake.screen;
 
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -26,7 +25,7 @@ final class MainMenuScreen extends BaseScreen {
      * Creates a new {@code MainMenuScreen} given the {@link Assets}, the {@link SpriteBatch},
      * the {@link ScreenManager}.
      *
-     * @param spriteBatch   the {@link SpriteBatch} to add sprites to
+     * @param spriteBatch the {@link SpriteBatch} to add sprites to
      */
     MainMenuScreen(SpriteBatch spriteBatch) {
         super(spriteBatch);

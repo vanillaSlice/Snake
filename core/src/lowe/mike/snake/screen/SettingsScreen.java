@@ -34,7 +34,7 @@ final class SettingsScreen extends BaseScreen {
      * Creates a new {@code SettingsScreen} given the {@link Assets}, the {@link SpriteBatch},
      * the {@link ScreenManager}.
      *
-     * @param spriteBatch   the {@link SpriteBatch} to add sprites to
+     * @param spriteBatch the {@link SpriteBatch} to add sprites to
      */
     SettingsScreen(SpriteBatch spriteBatch) {
         super(spriteBatch);

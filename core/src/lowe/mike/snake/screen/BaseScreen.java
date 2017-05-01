@@ -43,14 +43,6 @@ class BaseScreen extends ScreenAdapter {
     @Override
     public final void show() {
         Gdx.input.setInputProcessor(stage);
-        onShow();
-    }
-
-    /**
-     * Method that subclasses can override to determine what to do
-     * when the {@link Screen} is shown.
-     */
-    void onShow() {
     }
 
     @Override

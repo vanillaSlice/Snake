@@ -3,7 +3,6 @@ package lowe.mike.snake.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -49,13 +48,12 @@ final class GameScreen extends BaseScreen {
      * Creates a new {@code GameScreen} given the {@link Assets}, the {@link SpriteBatch},
      * the {@link ScreenManager}.
      *
-     * @param spriteBatch   the {@link SpriteBatch} to add sprites to
+     * @param spriteBatch the {@link SpriteBatch} to add sprites to
      */
     GameScreen(SpriteBatch spriteBatch) {
         super(spriteBatch);
         setBackground();
-        Rectangle bounds = new Rectangle(X, Y, World.WIDTH, World.HEIGHT);
-        this.world = new World(bounds, this.stage);
+        this.world = new World(this.stage);
         addGameFrame();
         this.scoreLabel = createScoreLabel();
         this.stage.addActor(this.scoreLabel);
@@ -217,11 +215,6 @@ final class GameScreen extends BaseScreen {
         State.setGameOver(false);
         State.setCurrentScore(0);
         world.reset();
-    }
-
-    @Override
-    void onShow() {
-        world.setLevel(State.getLevel());
     }
 
     @Override
