@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import lowe.mike.snake.SnakeGame;
@@ -26,20 +25,23 @@ import lowe.mike.snake.world.World;
  */
 final class GameScreen extends BaseScreen {
 
-    private final Label scoreLabel;
+    private static final float SCORE_LABEL_X = 20f;
+    private static final float SCORE_LABEL_Y = 565.5f;
+    private static final float UP_BUTTON_X = 148f;
+    private static final float UP_BUTTON_Y = 166f;
+    private static final float RIGHT_BUTTON_X = 216f;
+    private static final float RIGHT_BUTTON_Y = 98f;
+    private static final float DOWN_BUTTON_X = 148f;
+    private static final float DOWN_BUTTON_Y = 30f;
+    private static final float LEFT_BUTTON_X = 80f;
+    private static final float LEFT_BUTTON_Y = 98f;
+    private static final float PAUSE_BUTTON_X = 308f;
+    private static final float PAUSE_BUTTON_Y = 198f;
+    private static final float BONUS_LABEL_Y = 565.5f;
+
     private final World world;
-    private final ImageButton upButton;
-    private final ImageButton rightButton;
-    private final ImageButton downButton;
-    private final ImageButton leftButton;
-    private final ImageButton pauseButton;
-    private final TextButton resumeButton;
-    private final TextButton settingsButton;
-    private final TextButton exitButton;
-    private final TextButton newGameButton;
-    private final Label gameOverLabel;
-    private final Label highScoreLabel;
-    private final Label currentScoreLabel;
+    private final Label scoreLabel;
+    private final Label bonusLabel;
 
     /**
      * Creates a new {@code GameScreen} given a {@link SpriteBatch}.
@@ -53,41 +55,38 @@ final class GameScreen extends BaseScreen {
         addGameFrame();
         this.scoreLabel = createScoreLabel();
         this.stage.addActor(this.scoreLabel);
-        this.upButton = createUpButton();
-        this.rightButton = createRightButton();
-        this.downButton = createDownButton();
-        this.leftButton = createLeftButton();
-        this.pauseButton = createPauseButton();
-        this.resumeButton = createResumeButton();
-        this.settingsButton = createSettingsButton();
-        this.exitButton = createExitButton();
-        this.newGameButton = createNewGameButton();
-        this.gameOverLabel = Utils.createTextLabel(Assets.getSmallFont(), "Game Over");
-        this.highScoreLabel = Utils.createTextLabel(Assets.getSmallFont(), "High Score : ");
-        this.currentScoreLabel = Utils.createTextLabel(Assets.getSmallFont(), "Current Score : ");
-        newGame();
+        addUpButton();
+        addRightButton();
+        addDownButton();
+        addLeftButton();
+        addPauseButton();
+        this.bonusLabel = Utils.createTextLabel(Assets.getSmallFont(), "");
+        initialise();
     }
 
     private void setBackground() {
         stage.addActor(new Image(Assets.getBackground()));
     }
 
-    private Label createScoreLabel() {
-        Label scoreLabel = Utils.createTextLabel(Assets.getSmallFont(), "0000");
-        float x = COMPONENT_SPACING;
-        float y = SnakeGame.HEIGHT - COMPONENT_SPACING * 2.5f - (scoreLabel.getHeight() / 2);
-        scoreLabel.setPosition(x, y);
-        return scoreLabel;
-    }
-
     private void addGameFrame() {
         stage.addActor(new Image(Assets.getGameFrame()));
     }
 
-    private ImageButton createUpButton() {
+    private Label createScoreLabel() {
+        Label scoreLabel = Utils.createTextLabel(Assets.getSmallFont(), "0000");
+        scoreLabel.setPosition(SCORE_LABEL_X, SCORE_LABEL_Y);
+        return scoreLabel;
+    }
+
+    private void addUpButton() {
         ImageButton upButton = Utils.createImageButton(Assets.getLargeUpArrow(),
                 Assets.getLargeUpArrowPressed());
-        upButton.setPosition(148f, 164f);
+        upButton.setPosition(UP_BUTTON_X, UP_BUTTON_Y);
+        addUpButtonListener(upButton);
+        stage.addActor(upButton);
+    }
+
+    private void addUpButtonListener(ImageButton upButton) {
         upButton.addListener(new InputListener() {
 
             @Override
@@ -96,13 +95,17 @@ final class GameScreen extends BaseScreen {
                 return true;
             }
         });
-        return upButton;
     }
 
-    private ImageButton createRightButton() {
+    private void addRightButton() {
         ImageButton rightButton = Utils.createImageButton(Assets.getLargeRightArrow(),
                 Assets.getLargeRightArrowPressed());
-        rightButton.setPosition(230f, 100f);
+        rightButton.setPosition(RIGHT_BUTTON_X, RIGHT_BUTTON_Y);
+        addRightButtonListener(rightButton);
+        stage.addActor(rightButton);
+    }
+
+    private void addRightButtonListener(ImageButton rightButton) {
         rightButton.addListener(new InputListener() {
 
             @Override
@@ -111,13 +114,17 @@ final class GameScreen extends BaseScreen {
                 return true;
             }
         });
-        return rightButton;
     }
 
-    private ImageButton createDownButton() {
+    private void addDownButton() {
         ImageButton downButton = Utils.createImageButton(Assets.getLargeDownArrow(),
                 Assets.getLargeDownArrowPressed());
-        downButton.setPosition(148f, 36f);
+        downButton.setPosition(DOWN_BUTTON_X, DOWN_BUTTON_Y);
+        addDownButtonListener(downButton);
+        stage.addActor(downButton);
+    }
+
+    private void addDownButtonListener(ImageButton downButton) {
         downButton.addListener(new InputListener() {
 
             @Override
@@ -126,13 +133,17 @@ final class GameScreen extends BaseScreen {
                 return true;
             }
         });
-        return downButton;
     }
 
-    private ImageButton createLeftButton() {
+    private void addLeftButton() {
         ImageButton leftButton = Utils.createImageButton(Assets.getLargeLeftArrow(),
                 Assets.getLargeLeftArrowPressed());
-        leftButton.setPosition(66f, 100f);
+        leftButton.setPosition(LEFT_BUTTON_X, LEFT_BUTTON_Y);
+        addLeftButtonListener(leftButton);
+        stage.addActor(leftButton);
+    }
+
+    private void addLeftButtonListener(ImageButton leftButton) {
         leftButton.addListener(new InputListener() {
 
             @Override
@@ -141,155 +152,52 @@ final class GameScreen extends BaseScreen {
                 return true;
             }
         });
-        return leftButton;
     }
 
-    private ImageButton createPauseButton() {
+    private void addPauseButton() {
         ImageButton pauseButton = Utils.createImageButton(Assets.getPause(),
                 Assets.getPausePressed());
-        pauseButton.setPosition(304f, 200f);
-        final GameScreen inst = this;
+        pauseButton.setPosition(PAUSE_BUTTON_X, PAUSE_BUTTON_Y);
+        addPauseButtonListener(pauseButton);
+        stage.addActor(pauseButton);
+    }
+
+    private void addPauseButtonListener(ImageButton pauseButton) {
         pauseButton.addListener(new ChangeListener() {
 
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                ScreenManager.setScreen(new PauseScreen(spriteBatch, inst));
+                switchToPauseScreen();
             }
+
         });
-        return pauseButton;
     }
 
-    private TextButton createResumeButton() {
-        TextButton resumeButton = Utils.createTextButton(Assets.getSmallFont(), "Resume");
-        resumeButton.setPosition(100f, 150f);
-        resumeButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                State.setGameOver(false);
-            }
-        });
-        return resumeButton;
+    private void switchToPauseScreen() {
+        ScreenManager.setScreen(new PauseScreen(spriteBatch, this));
     }
 
-    private TextButton createSettingsButton() {
-        final TextButton settingsButton = Utils.createTextButton(Assets.getSmallFont(), "Settings");
-        settingsButton.setPosition(100f, 100f);
-        settingsButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                ScreenManager.setScreen(new SettingsScreen(spriteBatch));
-            }
-        });
-        return settingsButton;
-    }
-
-    private TextButton createExitButton() {
-        TextButton exitButton = Utils.createTextButton(Assets.getSmallFont(), "Exit");
-        exitButton.setPosition(100f, 50f);
-        exitButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                ScreenManager.disposeAndClearAllScreens();
-                ScreenManager.setScreen(new MainMenuScreen(spriteBatch));
-            }
-        });
-        return exitButton;
-    }
-
-    private TextButton createNewGameButton() {
-        TextButton newGameButton = Utils.createTextButton(Assets.getSmallFont(), "New Game");
-        newGameButton.setPosition(100f, 100f);
-        newGameButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                newGame();
-            }
-        });
-        return newGameButton;
-    }
-
-    public void newGame() {
+    private void initialise() {
         State.setGameOver(false);
         State.setCurrentScore(0);
+    }
+
+    void newGame() {
         world.reset();
+        initialise();
     }
 
     @Override
     void update(float delta) {
-        showState();
+        // switch screens if game is over
         if (State.isGameOver()) {
-            updateInGameOverState();
             ScreenManager.setScreen(new GameOverScreen(spriteBatch, this));
-        } else {
-            updateInRunningState(delta);
+            return;
         }
-    }
-
-    private void showState() {
-        boolean isGameOver = State.isGameOver();
-        showRunningState(!isGameOver);
-        showGameOverState(isGameOver);
-        //showPausedState(!isGameOver);
-
-    }
-
-    private void showRunningState(boolean show) {
-        if (show) {
-            stage.addActor(upButton);
-            stage.addActor(rightButton);
-            stage.addActor(downButton);
-            stage.addActor(leftButton);
-            stage.addActor(pauseButton);
-            exitButton.remove();
-            newGameButton.remove();
-        } else {
-            upButton.remove();
-            rightButton.remove();
-            downButton.remove();
-            leftButton.remove();
-            pauseButton.remove();
-        }
-    }
-
-    private void showGameOverState(boolean show) {
-        if (show) {
-            stage.addActor(newGameButton);
-            stage.addActor(exitButton);
-
-            if (State.getCurrentScore() > State.getHighScore()) {
-                State.setHighScore(State.getCurrentScore());
-            }
-            stage.addActor(gameOverLabel);
-            highScoreLabel.setText(String.format("High Score : %04d", State.getHighScore()));
-            highScoreLabel.setPosition(100f, 300f);
-            currentScoreLabel.setText(String.format("Current Score : %04d", State.getCurrentScore()));
-            currentScoreLabel.setPosition(100f, 200f);
-            stage.addActor(highScoreLabel);
-            stage.addActor(currentScoreLabel);
-
-        } else {
-            gameOverLabel.remove();
-            highScoreLabel.remove();
-            currentScoreLabel.remove();
-        }
-    }
-
-    private void showPausedState(boolean show) {
-        if (show) {
-            stage.addActor(resumeButton);
-            stage.addActor(settingsButton);
-            stage.addActor(exitButton);
-        } else {
-            resumeButton.remove();
-            settingsButton.remove();
-        }
-    }
-
-    private void updateInRunningState(float delta) {
         world.update(delta);
         handleUserInput();
-        scoreLabel.setText(String.format("%04d", State.getCurrentScore()));
-        scoreLabel.pack();
+        updateScoreLabel();
+        updateBonusLabel();
     }
 
     private void handleUserInput() {
@@ -304,13 +212,21 @@ final class GameScreen extends BaseScreen {
         }
     }
 
-    private void updateInGameOverState() {
-        //    world.reset();
-        //    gameState.setCurrentState(GameState.State.RUNNING);
-        //    gameState.setCurrentScore(0);
+    private void updateScoreLabel() {
+        scoreLabel.setText(String.format("%04d", State.getCurrentScore()));
+        scoreLabel.pack();
     }
 
-    private void updateInPausedState() {
+    private void updateBonusLabel() {
+        if (world.isBonusFoodShowing()) {
+            Utils.updateNumberLabel(bonusLabel, world.getBonusFoodTicksRemaining());
+            bonusLabel.pack();
+            bonusLabel.setPosition(SnakeGame.WIDTH - COMPONENT_SPACING - bonusLabel.getWidth(),
+                    BONUS_LABEL_Y);
+            stage.addActor(bonusLabel);
+        } else {
+            bonusLabel.remove();
+        }
     }
 
 }

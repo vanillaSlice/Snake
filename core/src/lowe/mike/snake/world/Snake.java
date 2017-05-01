@@ -45,17 +45,10 @@ final class Snake extends Actor {
 
     private void initialise() {
         head.setPosition(World.BOUNDS.x, World.BOUNDS.y);
-        resetBodyParts();
-        currentDirection = Direction.RIGHT;
-        lastDirection = currentDirection;
-        isDying = false;
-        isDead = false;
-        flashTick = 0f;
-        timesFlashed = 0;
+        initialiseBodyParts();
     }
 
-    private void resetBodyParts() {
-        bodyParts.clear();
+    private void initialiseBodyParts() {
         for (int i = 1; i <= INITIAL_NUMBER_OF_BODY_PARTS; i++) {
             Image bodyPart = new Image(Assets.getBlock());
             float x = head.getX() - (i * World.GRID_CELL_WIDTH);
@@ -69,6 +62,14 @@ final class Snake extends Actor {
      * Resets this {@code Snake} to its initial state.
      */
     void reset() {
+        bodyParts.clear();
+        currentDirection = Direction.RIGHT;
+        lastDirection = currentDirection;
+        isDying = false;
+        isDead = false;
+        flashTick = 0f;
+        timesFlashed = 0;
+        setVisible(true);
         initialise();
     }
 

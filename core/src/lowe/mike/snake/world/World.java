@@ -30,7 +30,7 @@ public final class World {
     private final BonusFood bonusFood;
     private float tick;
     private int eaten;
-    private int nextBonusFoodAppearance;
+    private int nextBonusFoodAppearance = BONUS_FOOD_APPEARANCE_INTERVAL;
     private int bonusFoodTicksRemaining;
 
     /**
@@ -45,17 +45,7 @@ public final class World {
         this.bonusFood = new BonusFood();
         this.stage.addActor(this.snake);
         this.stage.addActor(this.food);
-        initialise();
-    }
-
-    private void initialise() {
-        snake.reset();
         setRandomPosition(food);
-        bonusFood.remove();
-        tick = 0f;
-        eaten = 0;
-        nextBonusFoodAppearance = BONUS_FOOD_APPEARANCE_INTERVAL;
-        bonusFoodTicksRemaining = 0;
     }
 
     private void setRandomPosition(Food food) {
@@ -92,7 +82,13 @@ public final class World {
      * Resets this {@code World} to its initial state.
      */
     public void reset() {
-        initialise();
+        snake.reset();
+        setRandomPosition(food);
+        bonusFood.remove();
+        tick = 0f;
+        eaten = 0;
+        nextBonusFoodAppearance = BONUS_FOOD_APPEARANCE_INTERVAL;
+        bonusFoodTicksRemaining = 0;
     }
 
     /**
