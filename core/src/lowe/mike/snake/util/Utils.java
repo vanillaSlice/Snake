@@ -1,8 +1,7 @@
 package lowe.mike.snake.util;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -12,8 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 
-import lowe.mike.snake.Constants;
-
 /**
  * {@code Utils} provides useful helper methods that are repeatedly used in the game.
  * <p>
@@ -22,6 +19,9 @@ import lowe.mike.snake.Constants;
  * @author Mike Lowe
  */
 public final class Utils {
+
+    private static final Color PRIMARY_FONT_COLOR = new Color(0xffffffff);
+    private static final Color SECONDARY_FONT_COLOR = new Color(0x727272ff);
 
     // don't want instances
     private Utils() {
@@ -37,7 +37,7 @@ public final class Utils {
     public static Label createTextLabel(BitmapFont font, String text) {
         Label.LabelStyle style = new Label.LabelStyle();
         style.font = font;
-        style.fontColor = Constants.PRIMARY_FONT_COLOR;
+        style.fontColor = PRIMARY_FONT_COLOR;
         Label label = new Label(text, style);
         label.setAlignment(Align.center);
         return label;
@@ -77,8 +77,8 @@ public final class Utils {
 
     private static TextButton createTextButton(BitmapFont font, String text, boolean checkable) {
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
-        style.fontColor = Constants.PRIMARY_FONT_COLOR;
-        style.downFontColor = Constants.SECONDARY_FONT_COLOR;
+        style.fontColor = PRIMARY_FONT_COLOR;
+        style.downFontColor = SECONDARY_FONT_COLOR;
         style.overFontColor = style.downFontColor;
         if (checkable) {
             style.checkedFontColor = style.downFontColor;
@@ -129,13 +129,6 @@ public final class Utils {
         } else {
             music.stop();
         }
-    }
-
-    /**
-     * @return the game {@link Preferences}
-     */
-    public static Preferences getPreferences() {
-        return Gdx.app.getPreferences(Constants.GAME_TITLE);
     }
 
     /**

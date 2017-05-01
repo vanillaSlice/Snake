@@ -2,21 +2,22 @@ package lowe.mike.snake.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
-import lowe.mike.snake.Constants;
-import lowe.mike.snake.state.GameSettings;
-import lowe.mike.snake.state.GameState;
+import lowe.mike.snake.SnakeGame;
 import lowe.mike.snake.util.Assets;
 import lowe.mike.snake.util.ScreenManager;
+import lowe.mike.snake.util.State;
 import lowe.mike.snake.util.Utils;
-import lowe.mike.snake.world.Snake;
 import lowe.mike.snake.world.World;
 
 /**
@@ -26,155 +27,296 @@ import lowe.mike.snake.world.World;
  */
 final class GameScreen extends BaseScreen {
 
+    private static final float X = COMPONENT_SPACING;
+    private static final float Y = 240f;
+
     private final Label scoreLabel;
     private final World world;
+    private final ImageButton upButton;
+    private final ImageButton rightButton;
+    private final ImageButton downButton;
+    private final ImageButton leftButton;
+    private final ImageButton pauseButton;
+    private final TextButton resumeButton;
+    private final TextButton settingsButton;
+    private final TextButton exitButton;
+    private final TextButton newGameButton;
+    private final Label gameOverLabel;
+    private final Label highScoreLabel;
+    private final Label currentScoreLabel;
 
     /**
      * Creates a new {@code GameScreen} given the {@link Assets}, the {@link SpriteBatch},
-     * the {@link ScreenManager} and the {@link GameState}.
+     * the {@link ScreenManager}.
      *
-     * @param assets        the {@link Assets} containing assets used in the {@link Screen}
      * @param spriteBatch   the {@link SpriteBatch} to add sprites to
-     * @param screenManager the {@link ScreenManager} used to manage game {@link Screen}s
-     * @param gameState     the {@link GameState} containing the current game state
      */
-    GameScreen(Assets assets, SpriteBatch spriteBatch, ScreenManager screenManager,
-               final GameState gameState) {
-        super(assets, spriteBatch, screenManager, gameState);
+    GameScreen(SpriteBatch spriteBatch) {
+        super(spriteBatch);
         setBackground();
+        Rectangle bounds = new Rectangle(X, Y, World.WIDTH, World.HEIGHT);
+        this.world = new World(bounds, this.stage);
+        addGameFrame();
         this.scoreLabel = createScoreLabel();
-        this.world = new World(assets, COMPONENT_SPACING, 240f, 320f, 320f, stage, gameState);
-        this.stage.addActor(this.world.getSnake());
-        this.stage.addActor(this.world.food);
-        this.stage.addActor(new Image(assets.getGameFrame()));
-
         this.stage.addActor(this.scoreLabel);
+        this.upButton = createUpButton();
+        this.rightButton = createRightButton();
+        this.downButton = createDownButton();
+        this.leftButton = createLeftButton();
+        this.pauseButton = createPauseButton();
+        this.resumeButton = createResumeButton();
+        this.settingsButton = createSettingsButton();
+        this.exitButton = createExitButton();
+        this.newGameButton = createNewGameButton();
+        this.gameOverLabel = Utils.createTextLabel(Assets.getSmallFont(), "Game Over");
+        this.highScoreLabel = Utils.createTextLabel(Assets.getSmallFont(), "High Score : ");
+        this.currentScoreLabel = Utils.createTextLabel(Assets.getSmallFont(), "Current Score : ");
+        newGame();
+    }
 
-        ImageButton rightButton = Utils.createImageButton(assets.getLargeRightArrow(),
-                assets.getLargeRightArrowPressed());
-        rightButton.setPosition(230f, 100f);
-        this.stage.addActor(rightButton);
-        rightButton.addListener(new InputListener() {
+    private void setBackground() {
+        stage.addActor(new Image(Assets.getBackground()));
+    }
 
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                world.getSnake().setDirection(Snake.Direction.RIGHT);
-                return true;
-            }
-        });
+    private Label createScoreLabel() {
+        Label scoreLabel = Utils.createTextLabel(Assets.getSmallFont(), "0000");
+        float x = COMPONENT_SPACING;
+        float y = SnakeGame.HEIGHT - COMPONENT_SPACING * 2.5f - (scoreLabel.getHeight() / 2);
+        scoreLabel.setPosition(x, y);
+        return scoreLabel;
+    }
 
-        ImageButton leftButton = Utils.createImageButton(assets.getLargeLeftArrow(),
-                assets.getLargeLeftArrowPressed());
-        leftButton.setPosition(66f, 100f);
-        this.stage.addActor(leftButton);
-        leftButton.addListener(new InputListener() {
+    private void addGameFrame() {
+        stage.addActor(new Image(Assets.getGameFrame()));
+    }
 
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                world.getSnake().setDirection(Snake.Direction.LEFT);
-                return true;
-            }
-        });
-
-        ImageButton upButton = Utils.createImageButton(assets.getLargeUpArrow(),
-                assets.getLargeUpArrowPressed());
+    private ImageButton createUpButton() {
+        ImageButton upButton = Utils.createImageButton(Assets.getLargeUpArrow(),
+                Assets.getLargeUpArrowPressed());
         upButton.setPosition(148f, 164f);
-        this.stage.addActor(upButton);
         upButton.addListener(new InputListener() {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                world.getSnake().setDirection(Snake.Direction.UP);
+                world.setSnakeDirectionUp();
                 return true;
             }
         });
+        return upButton;
+    }
 
-        ImageButton downButton = Utils.createImageButton(assets.getLargeDownArrow(),
-                assets.getLargeDownArrowPressed());
+    private ImageButton createRightButton() {
+        ImageButton rightButton = Utils.createImageButton(Assets.getLargeRightArrow(),
+                Assets.getLargeRightArrowPressed());
+        rightButton.setPosition(230f, 100f);
+        rightButton.addListener(new InputListener() {
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                world.setSnakeDirectionRight();
+                return true;
+            }
+        });
+        return rightButton;
+    }
+
+    private ImageButton createDownButton() {
+        ImageButton downButton = Utils.createImageButton(Assets.getLargeDownArrow(),
+                Assets.getLargeDownArrowPressed());
         downButton.setPosition(148f, 36f);
-        this.stage.addActor(downButton);
         downButton.addListener(new InputListener() {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                world.getSnake().setDirection(Snake.Direction.DOWN);
+                world.setSnakeDirectionDown();
                 return true;
             }
         });
+        return downButton;
+    }
 
-        ImageButton pauseButton = Utils.createImageButton(assets.getPause(),
-                assets.getPausePressed());
+    private ImageButton createLeftButton() {
+        ImageButton leftButton = Utils.createImageButton(Assets.getLargeLeftArrow(),
+                Assets.getLargeLeftArrowPressed());
+        leftButton.setPosition(66f, 100f);
+        leftButton.addListener(new InputListener() {
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                world.setSnakeDirectionLeft();
+                return true;
+            }
+        });
+        return leftButton;
+    }
+
+    private ImageButton createPauseButton() {
+        ImageButton pauseButton = Utils.createImageButton(Assets.getPause(),
+                Assets.getPausePressed());
         pauseButton.setPosition(304f, 200f);
         pauseButton.addListener(new InputListener() {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (gameState.getCurrentState() == GameState.State.PAUSED) {
-                    gameState.setCurrentState(GameState.State.RUNNING);
-                } else {
-                    gameState.setCurrentState(GameState.State.PAUSED);
-                }
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
-        this.stage.addActor(pauseButton);
-        world.setLevel(GameSettings.getLevel());
+        return pauseButton;
     }
 
-    private void setBackground() {
-        stage.addActor(new Image(assets.getBackground()));
+    private TextButton createResumeButton() {
+        TextButton resumeButton = Utils.createTextButton(Assets.getSmallFont(), "Resume");
+        resumeButton.setPosition(100f, 150f);
+        resumeButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                State.setGameOver(false);
+            }
+        });
+        return resumeButton;
     }
 
-    private Label createScoreLabel() {
-        Label scoreLabel = Utils.createTextLabel(assets.getSmallFont(), "0000");
-        float x = COMPONENT_SPACING;
-        float y = Constants.GAME_HEIGHT - COMPONENT_SPACING * 2.5f - (scoreLabel.getHeight() / 2);
-        scoreLabel.setPosition(x, y);
-        return scoreLabel;
+    private TextButton createSettingsButton() {
+        final TextButton settingsButton = Utils.createTextButton(Assets.getSmallFont(), "Settings");
+        settingsButton.setPosition(100f, 100f);
+        settingsButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                ScreenManager.setScreen(new SettingsScreen(spriteBatch));
+            }
+        });
+        return settingsButton;
+    }
+
+    private TextButton createExitButton() {
+        TextButton exitButton = Utils.createTextButton(Assets.getSmallFont(), "Exit");
+        exitButton.setPosition(100f, 50f);
+        exitButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                ScreenManager.disposeAndClearAllScreens();
+                ScreenManager.setScreen(new MainMenuScreen(spriteBatch));
+            }
+        });
+        return exitButton;
+    }
+
+    private TextButton createNewGameButton() {
+        TextButton newGameButton = Utils.createTextButton(Assets.getSmallFont(), "New Game");
+        newGameButton.setPosition(100f, 100f);
+        newGameButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                newGame();
+            }
+        });
+        return newGameButton;
+    }
+
+    private void newGame() {
+        State.setGameOver(false);
+        State.setCurrentScore(0);
+        world.reset();
+    }
+
+    @Override
+    void onShow() {
+        world.setLevel(State.getLevel());
     }
 
     @Override
     void update(float delta) {
-        switch (gameState.getCurrentState()) {
-            case RUNNING:
-                updateInRunningState(delta);
-                break;
-            case ENTERING_GAME_OVER:
-                updateInEnteringGameOverState();
-                break;
-            case GAME_OVER:
-                updateInGameOverState();
-                break;
-            case PAUSED:
-                updateInPausedState();
-                break;
+        showState();
+        if (State.isGameOver()) {
+            updateInGameOverState();
+        } else {
+            updateInRunningState(delta);
+        }
+    }
+
+    private void showState() {
+        boolean isGameOver = State.isGameOver();
+        showRunningState(!isGameOver);
+        showGameOverState(isGameOver);
+        //showPausedState(!isGameOver);
+
+    }
+
+    private void showRunningState(boolean show) {
+        if (show) {
+            stage.addActor(upButton);
+            stage.addActor(rightButton);
+            stage.addActor(downButton);
+            stage.addActor(leftButton);
+            stage.addActor(pauseButton);
+            exitButton.remove();
+            newGameButton.remove();
+        } else {
+            upButton.remove();
+            rightButton.remove();
+            downButton.remove();
+            leftButton.remove();
+            pauseButton.remove();
+        }
+    }
+
+    private void showGameOverState(boolean show) {
+        if (show) {
+            stage.addActor(newGameButton);
+            stage.addActor(exitButton);
+
+            if (State.getCurrentScore() > State.getHighScore()) {
+                State.setHighScore(State.getCurrentScore());
+            }
+            stage.addActor(gameOverLabel);
+            highScoreLabel.setText(String.format("High Score : %04d", State.getHighScore()));
+            highScoreLabel.setPosition(100f, 300f);
+            currentScoreLabel.setText(String.format("Current Score : %04d", State.getCurrentScore()));
+            currentScoreLabel.setPosition(100f, 200f);
+            stage.addActor(highScoreLabel);
+            stage.addActor(currentScoreLabel);
+
+        } else {
+            gameOverLabel.remove();
+            highScoreLabel.remove();
+            currentScoreLabel.remove();
+        }
+    }
+
+    private void showPausedState(boolean show) {
+        if (show) {
+            stage.addActor(resumeButton);
+            stage.addActor(settingsButton);
+            stage.addActor(exitButton);
+        } else {
+            resumeButton.remove();
+            settingsButton.remove();
         }
     }
 
     private void updateInRunningState(float delta) {
         world.update(delta);
         handleUserInput();
-        scoreLabel.setText(String.format("%04d", gameState.getCurrentScore()));
+        scoreLabel.setText(String.format("%04d", State.getCurrentScore()));
         scoreLabel.pack();
     }
 
     private void handleUserInput() {
-        Snake snake = world.getSnake();
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-            snake.setDirection(Snake.Direction.UP);
+            world.setSnakeDirectionUp();
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
-            snake.setDirection(Snake.Direction.RIGHT);
+            world.setSnakeDirectionRight();
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
-            snake.setDirection(Snake.Direction.DOWN);
+            world.setSnakeDirectionDown();
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
-            snake.setDirection(Snake.Direction.LEFT);
+            world.setSnakeDirectionLeft();
         }
     }
 
-    private void updateInEnteringGameOverState() {
-    }
-
     private void updateInGameOverState() {
+        //    world.reset();
+        //    gameState.setCurrentState(GameState.State.RUNNING);
+        //    gameState.setCurrentScore(0);
     }
 
     private void updateInPausedState() {

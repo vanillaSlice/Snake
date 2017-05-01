@@ -1,84 +1,247 @@
 package lowe.mike.snake.world;
 
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 
+import lowe.mike.snake.util.Assets;
+
 /**
- * Created by mikelowe on 11/04/2017.
+ * {@code Snake} instances represent the snake to be controlled by the player.
+ *
+ * @author Mike Lowe
  */
+final class Snake extends Actor {
 
-public class Snake extends Image {
+    private static final int INITIAL_NUMBER_OF_BODY_PARTS = 5;
+    private static final float FLASH_TICK_INTERVAL = .1f;
+    private static final int NUMBER_OF_FLASHES = 10;
 
-    public enum Direction {
-        UP, DOWN, LEFT, RIGHT;
+    /**
+     * Directions the snake can travel.
+     */
+    enum Direction {
+        UP, RIGHT, DOWN, LEFT
     }
 
-    private TextureRegionDrawable open;
-    private TextureRegionDrawable closed;
+    private final Rectangle bounds;
+    private final Image head;
+    private final Array<Image> bodyParts = new Array<Image>();
+    private Direction currentDirection = Direction.RIGHT;
+    private Direction lastDirection = currentDirection;
+    private boolean isDying;
+    private boolean isDead;
+    private float flashTick;
+    private int timesFlashed;
 
-    private Direction lastDirection = Direction.RIGHT;
-    private Direction direction = Direction.RIGHT;
-    public Array<Image> bodyparts = new Array<Image>();
+    /**
+     * Creates a new {@code Snake} instance.
+     *
+     * @param bounds the {@link Rectangle} bounds that make up the world the {@code Snake} is in
+     */
+    Snake(Rectangle bounds) {
+        this.bounds = bounds;
+        this.head = new Image(Assets.getBlock());
+        initialise();
+    }
 
-    public Snake(TextureRegion body, Stage stage) {
-        super(body);
-        setOrigin(getWidth() / 2, getHeight() / 2);
+    private void initialise() {
+        head.setPosition(bounds.x, bounds.y);
+        resetBodyParts();
+        currentDirection = Direction.RIGHT;
+        lastDirection = currentDirection;
+        isDying = false;
+        isDead = false;
+        flashTick = 0f;
+        timesFlashed = 0;
+    }
 
-        for (int i = 0; i < 10; i++) {
-            Image bodyPart = new Image(body);
-            bodyparts.add(bodyPart);
-            stage.addActor(bodyPart);
+    private void resetBodyParts() {
+        bodyParts.clear();
+        for (int i = 1; i <= INITIAL_NUMBER_OF_BODY_PARTS; i++) {
+            Image bodyPart = new Image(Assets.getBlock());
+            float x = head.getX() - (i * World.GRID_CELL_WIDTH);
+            float y = head.getY();
+            bodyPart.setPosition(x, y);
+            bodyParts.add(bodyPart);
         }
     }
 
-    public void update(float delta) {
-        for (int i = 9; i >= 1; i--) {
-            int x = (int) bodyparts.get(i - 1).getX();
-            int y = (int) bodyparts.get(i - 1).getY();
-            if (bodyparts.get(i).getX() != x || bodyparts.get(i).getY() != y) {
-                bodyparts.get(i).setPosition(x, y);
-            }
-        }
-        bodyparts.first().setPosition((int) getX(), (int) getY());
+    /**
+     * Resets this {@code Snake} to its initial state.
+     */
+    void reset() {
+        initialise();
+    }
 
-        switch (direction) {
+    /**
+     * @return this {@code Snake}'s head
+     */
+    Image getHead() {
+        return head;
+    }
+
+    /**
+     * @return if this {@code Snake} is dying
+     */
+    boolean isDying() {
+        return isDying;
+    }
+
+    /**
+     * @return if this {@code Snake} is dead
+     */
+    boolean isDead() {
+        return isDead;
+    }
+
+    /**
+     * Updates this {@code Snake}'s position and state.
+     */
+    void updatePositionAndState() {
+        // don't need to update anything if the snake is dying or dead
+        if (isDying || isDead) {
+            return;
+        }
+        Vector2 nextHeadPosition = calculateNextHeadPosition();
+        if (isBodyPartOccupyingPosition(nextHeadPosition.x, nextHeadPosition.y)) {
+            isDying = true;
+        } else {
+            updatePosition(nextHeadPosition);
+            lastDirection = currentDirection;
+        }
+    }
+
+    private Vector2 calculateNextHeadPosition() {
+        Vector2 position = new Vector2(head.getX(), head.getY());
+        switch (currentDirection) {
             case UP:
-                setY((int) (getY() + getHeight()));
-                setRotation(0);
-                lastDirection = Direction.UP;
+                position.y = head.getY() + World.GRID_CELL_HEIGHT;
                 break;
             case RIGHT:
-                setX((int) (getX() + getWidth()));
-                setRotation(270);
-                lastDirection = Direction.RIGHT;
+                position.x = head.getX() + World.GRID_CELL_WIDTH;
                 break;
             case DOWN:
-                setY((int) (getY() - getHeight()));
-                setRotation(180);
-                lastDirection = Direction.DOWN;
+                position.y = head.getY() - World.GRID_CELL_HEIGHT;
                 break;
             case LEFT:
-                setX((int) (getX() - getWidth()));
-                setRotation(90);
-                lastDirection = Direction.LEFT;
+                position.x = head.getX() - World.GRID_CELL_WIDTH;
                 break;
         }
+        ensurePositionIsInBounds(position);
+        return position;
     }
 
-
-    public Direction getDirection() {
-        return direction;
-    }
-
-    public void setDirection(Direction direction) {
-        if (direction == Direction.UP && lastDirection != Snake.Direction.DOWN ||
-                direction == Direction.RIGHT && lastDirection != Snake.Direction.LEFT ||
-                direction == Direction.DOWN && lastDirection != Snake.Direction.UP ||
-                direction == Direction.LEFT && lastDirection != Snake.Direction.RIGHT) {
-            this.direction = direction;
+    private void ensurePositionIsInBounds(Vector2 position) {
+        if (position.x < bounds.x) {
+            position.x = bounds.width + bounds.x - World.GRID_CELL_WIDTH;
+        } else if (position.x >= bounds.width + bounds.x) {
+            position.x = bounds.x;
+        } else if (position.y < bounds.y) {
+            position.y = bounds.height + bounds.y - World.GRID_CELL_HEIGHT;
+        } else if (position.y >= bounds.height + bounds.y) {
+            position.y = bounds.y;
         }
     }
+
+    /**
+     * @param x the x position
+     * @param y the y position
+     * @return if this {@code Snake}'s head is occupying the given position
+     */
+    boolean isHeadOccupyingPosition(float x, float y) {
+        return head.getX() == x && head.getY() == y;
+    }
+
+    /**
+     * @param x the x position
+     * @param y the y position
+     * @return if any of this {@code Snake}'s body parts are occupying the given position
+     */
+    boolean isBodyPartOccupyingPosition(float x, float y) {
+        for (Image bodyPart : bodyParts) {
+            if (bodyPart.getX() == x && bodyPart.getY() == y) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void updatePosition(Vector2 nextHeadPosition) {
+        // shift body parts forward
+        for (int i = bodyParts.size - 1; i >= 1; i--) {
+            Image nextBodyPart = bodyParts.get(i - 1);
+            Image currentBodyPart = bodyParts.get(i);
+            currentBodyPart.setPosition(nextBodyPart.getX(), nextBodyPart.getY());
+        }
+        // make sure first body part moves to head position
+        if (bodyParts.size > 0) {
+            bodyParts.first().setPosition(head.getX(), head.getY());
+        }
+        // update the head position
+        head.setPosition(nextHeadPosition.x, nextHeadPosition.y);
+    }
+
+    /**
+     * Sets the {@link Direction} of this {@code Snake}. Note that the {@code Snake} cannot turn
+     * around to the opposite direction. So, for example, if the {@code Snake} is traveling upwards,
+     * then is cannot go downwards.
+     *
+     * @param currentDirection the {@link Direction}
+     */
+    void setCurrentDirection(Direction currentDirection) {
+        // don't let snake turn around into the opposite direction
+        if (currentDirection == Direction.UP && lastDirection != Snake.Direction.DOWN ||
+                currentDirection == Direction.RIGHT && lastDirection != Snake.Direction.LEFT ||
+                currentDirection == Direction.DOWN && lastDirection != Snake.Direction.UP ||
+                currentDirection == Direction.LEFT && lastDirection != Snake.Direction.RIGHT) {
+            this.currentDirection = currentDirection;
+        }
+    }
+
+    /**
+     * Adds a new body part to the end of this {@code Snake}.
+     */
+    void addBodyPart() {
+        Image newBodyPart = new Image(Assets.getBlock());
+        Image lastBodyPart = bodyParts.peek();
+        newBodyPart.setPosition(lastBodyPart.getX(), lastBodyPart.getY());
+        bodyParts.add(newBodyPart);
+    }
+
+    /**
+     * Updates this {@code Snake}'s death sequence.
+     *
+     * @param delta time in seconds since the last frame
+     */
+    void updateDeathSequence(float delta) {
+        // if snake has flashed the required amount of times, then it has finished dying
+        if (timesFlashed >= NUMBER_OF_FLASHES) {
+            isDead = true;
+            isDying = false;
+        }
+        // make snake flash when appropriate
+        if (flashTick >= FLASH_TICK_INTERVAL) {
+            flashTick -= FLASH_TICK_INTERVAL;
+            setVisible(!isVisible());
+            if (isVisible()) {
+                timesFlashed++;
+            }
+        } else {
+            flashTick += delta;
+        }
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
+        head.draw(batch, parentAlpha);
+        for (Image bodyPart : bodyParts) {
+            bodyPart.draw(batch, parentAlpha);
+        }
+    }
+
 }

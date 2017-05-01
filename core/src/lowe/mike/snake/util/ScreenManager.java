@@ -3,27 +3,33 @@ package lowe.mike.snake.util;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Disposable;
 
 /**
  * {@code ScreenManager} is used to manage {@link Screen}s in
  * {@link Game} instances.
+ * <p>
+ * Instances of {@code ScreenManager} cannot be created.
  *
  * @author Mike Lowe
  */
-public final class ScreenManager implements Disposable {
+public final class ScreenManager {
 
-    private final Game game;
-    private final Array<Screen> screens = new Array<Screen>();
+    private static Game game;
+    private static Array<Screen> screens;
+
+    // don't want instances
+    private ScreenManager() {
+    }
 
     /**
-     * Creates a new {@code ScreenManager} with a reference to the
+     * Initialises the {@code ScreenManager} with a reference to the
      * {@link Game}.
      *
      * @param game reference to the {@link Game}
      */
-    public ScreenManager(Game game) {
-        this.game = game;
+    public static void initialise(Game game) {
+        ScreenManager.game = game;
+        screens = new Array<Screen>();
     }
 
     /**
@@ -32,7 +38,7 @@ public final class ScreenManager implements Disposable {
      *
      * @param screen the {@link Screen} to display
      */
-    public void setScreen(Screen screen) {
+    public static void setScreen(Screen screen) {
         screens.add(screen);
         game.setScreen(screen);
     }
@@ -41,7 +47,7 @@ public final class ScreenManager implements Disposable {
      * Switches to the previous {@link Screen}, if one exists. Note that
      * this removes and disposes the current {@link Screen}, if one exists.
      */
-    public void switchToPreviousScreen() {
+    public static void switchToPreviousScreen() {
         // remove and dispose current screen
         if (screens.size != 0) {
             screens.pop().dispose();
@@ -55,16 +61,11 @@ public final class ScreenManager implements Disposable {
     /**
      * Disposes and clears all {@link Screen}s.
      */
-    public void disposeAndClearAllScreens() {
+    public static void disposeAndClearAllScreens() {
         for (Screen screen : screens) {
             screen.dispose();
         }
         screens.clear();
-    }
-
-    @Override
-    public void dispose() {
-        disposeAndClearAllScreens();
     }
 
 }

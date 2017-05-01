@@ -9,11 +9,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
-import lowe.mike.snake.Constants;
-import lowe.mike.snake.state.GameSettings;
-import lowe.mike.snake.state.GameState;
+import lowe.mike.snake.SnakeGame;
 import lowe.mike.snake.util.Assets;
 import lowe.mike.snake.util.ScreenManager;
+import lowe.mike.snake.util.State;
 import lowe.mike.snake.util.Utils;
 
 /**
@@ -25,24 +24,19 @@ final class MainMenuScreen extends BaseScreen {
 
     /**
      * Creates a new {@code MainMenuScreen} given the {@link Assets}, the {@link SpriteBatch},
-     * the {@link ScreenManager} and the {@link GameState}.
+     * the {@link ScreenManager}.
      *
-     * @param assets        the {@link Assets} containing assets used in the {@link Screen}
      * @param spriteBatch   the {@link SpriteBatch} to add sprites to
-     * @param screenManager the {@link ScreenManager} used to manage game {@link Screen}s
-     * @param gameState     the {@link GameState} containing the current game state
      */
-    MainMenuScreen(Assets assets, SpriteBatch spriteBatch, ScreenManager screenManager,
-                   GameState gameState) {
-        super(assets, spriteBatch, screenManager, gameState);
+    MainMenuScreen(SpriteBatch spriteBatch) {
+        super(spriteBatch);
         setBackground();
         addMenu();
         playMusic();
-        addWorld();
     }
 
     private void setBackground() {
-        stage.addActor(new Image(assets.getBackground()));
+        stage.addActor(new Image(Assets.getBackground()));
     }
 
     private void addMenu() {
@@ -55,7 +49,7 @@ final class MainMenuScreen extends BaseScreen {
 
     private void addTitleLabel(Table menu) {
         menu.row().padBottom(COMPONENT_SPACING);
-        Label titleLabel = Utils.createTextLabel(assets.getLargeFont(), Constants.GAME_TITLE);
+        Label titleLabel = Utils.createTextLabel(Assets.getLargeFont(), SnakeGame.TITLE);
         menu.add(titleLabel).expandX();
     }
 
@@ -66,7 +60,7 @@ final class MainMenuScreen extends BaseScreen {
     }
 
     private TextButton createPlayButton() {
-        TextButton playButton = Utils.createTextButton(assets.getMediumFont(), "Play");
+        TextButton playButton = Utils.createTextButton(Assets.getMediumFont(), "Play");
         addPlayButtonListener(playButton);
         return playButton;
     }
@@ -85,8 +79,8 @@ final class MainMenuScreen extends BaseScreen {
     private void switchToGameScreen() {
         // dispose this screen and all previous screens because we won't be able to return from the
         // next screen
-        screenManager.disposeAndClearAllScreens();
-        screenManager.setScreen(new GameScreen(assets, spriteBatch, screenManager, gameState));
+        ScreenManager.disposeAndClearAllScreens();
+        ScreenManager.setScreen(new GameScreen(spriteBatch));
     }
 
     private void addSettingsButton(Table menu) {
@@ -96,7 +90,7 @@ final class MainMenuScreen extends BaseScreen {
     }
 
     private TextButton createSettingsButton() {
-        TextButton settingsButton = Utils.createTextButton(assets.getMediumFont(), "Settings");
+        TextButton settingsButton = Utils.createTextButton(Assets.getMediumFont(), "Settings");
         addSettingsButtonListener(settingsButton);
         return settingsButton;
     }
@@ -115,15 +109,11 @@ final class MainMenuScreen extends BaseScreen {
     private void switchToSettingsScreen() {
         // don't dispose this screen because we want to be able to return to it
         // from the next screen
-        screenManager.setScreen(new SettingsScreen(assets, spriteBatch, screenManager, gameState));
+        ScreenManager.setScreen(new SettingsScreen(spriteBatch));
     }
 
     private void playMusic() {
-        Utils.playMusic(assets.getMusic(), GameSettings.shouldPlayMusic());
-    }
-
-    private void addWorld() {
-        // interact with world here
+        Utils.playMusic(Assets.getMusic(), State.shouldPlayMusic());
     }
 
 }

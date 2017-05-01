@@ -10,17 +10,16 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
-import com.badlogic.gdx.utils.Disposable;
-
-import lowe.mike.snake.Constants;
 
 /**
  * {@code Assets} provides access to assets, such as {@link Texture}s,
  * used in the <i>Snake</i> game.
+ * <p>
+ * Instances of {@code Assets} cannot be created.
  *
  * @author Mike Lowe
  */
-public final class Assets implements Disposable {
+public final class Assets {
 
     /*
      * Describe the assets to load in.
@@ -35,34 +34,58 @@ public final class Assets implements Disposable {
     private static final AssetDescriptor<TextureAtlas> TEXTURE_ATLAS_ASSET_DESCRIPTOR
             = new AssetDescriptor<TextureAtlas>("textures.atlas", TextureAtlas.class);
 
-    private final AssetManager assetManager = new AssetManager();
-    private Texture splashBackground;
-    private BitmapFont largeFont;
-    private BitmapFont mediumFont;
-    private BitmapFont smallFont;
-    private Music music;
-    private TextureRegion background;
-    private TextureRegion gameFrame;
-    private TextureRegion largeUpArrow;
-    private TextureRegion largeUpArrowPressed;
-    private TextureRegion largeRightArrow;
-    private TextureRegion largeRightArrowPressed;
-    private TextureRegion largeDownArrow;
-    private TextureRegion largeDownArrowPressed;
-    private TextureRegion largeLeftArrow;
-    private TextureRegion largeLeftArrowPressed;
-    private TextureRegion smallRightArrow;
-    private TextureRegion smallRightArrowPressed;
-    private TextureRegion smallLeftArrow;
-    private TextureRegion smallLeftArrowPressed;
-    private TextureRegion pause;
-    private TextureRegion pausePressed;
-    private TextureRegion block;
+    /*
+     * Font properties.
+     */
+    private static final int LARGE_FONT_SIZE = 62;
+    private static final int MEDIUM_FONT_SIZE = 36;
+    private static final int SMALL_FONT_SIZE = 28;
+
+    /*
+     * Music properties.
+     */
+    private static final float MUSIC_VOLUME = .2f;
+
+    /*
+     * Used to load in assets.
+     */
+    private static AssetManager assetManager;
+
+    /*
+     * Assets.
+     */
+    private static Texture splashBackground;
+    private static BitmapFont largeFont;
+    private static BitmapFont mediumFont;
+    private static BitmapFont smallFont;
+    private static Music music;
+    private static TextureRegion background;
+    private static TextureRegion gameFrame;
+    private static TextureRegion largeUpArrow;
+    private static TextureRegion largeUpArrowPressed;
+    private static TextureRegion largeRightArrow;
+    private static TextureRegion largeRightArrowPressed;
+    private static TextureRegion largeDownArrow;
+    private static TextureRegion largeDownArrowPressed;
+    private static TextureRegion largeLeftArrow;
+    private static TextureRegion largeLeftArrowPressed;
+    private static TextureRegion smallRightArrow;
+    private static TextureRegion smallRightArrowPressed;
+    private static TextureRegion smallLeftArrow;
+    private static TextureRegion smallLeftArrowPressed;
+    private static TextureRegion pause;
+    private static TextureRegion pausePressed;
+    private static TextureRegion block;
+
+    // don't want instances
+    private Assets() {
+    }
 
     /**
-     * Creates a new {@code Assets} instance.
+     * Initialises the {@code Assets}.
      */
-    public Assets() {
+    public static void initialise() {
+        assetManager = new AssetManager();
         loadSplashBackground();
         loadMainAssets();
     }
@@ -72,7 +95,7 @@ public final class Assets implements Disposable {
      * This is so we can display the splash screen while the main assets
      * are still being loaded.
      */
-    private void loadSplashBackground() {
+    private static void loadSplashBackground() {
         assetManager.load(SPLASH_BACKGROUND_ASSET_DESCRIPTOR);
         assetManager.finishLoading();
         splashBackground = assetManager.get(SPLASH_BACKGROUND_ASSET_DESCRIPTOR);
@@ -80,7 +103,7 @@ public final class Assets implements Disposable {
         splashBackground.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
     }
 
-    private void loadMainAssets() {
+    private static void loadMainAssets() {
         // need this so we can load in fonts
         assetManager.setLoader(FreeTypeFontGenerator.class,
                 new FreeTypeFontGeneratorLoader(new InternalFileHandleResolver()));
@@ -92,7 +115,7 @@ public final class Assets implements Disposable {
     /**
      * @return {@code true} if all loading is finished
      */
-    public boolean isFinishedLoading() {
+    public static boolean isFinishedLoading() {
         if (assetManager.update()) {
             loadFonts();
             loadMusic();
@@ -103,7 +126,7 @@ public final class Assets implements Disposable {
         }
     }
 
-    private void loadFonts() {
+    private static void loadFonts() {
         FreeTypeFontGenerator fontGenerator = assetManager.get(FONT_GENERATOR_ASSET_DESCRIPTOR);
 
         FreeTypeFontGenerator.FreeTypeFontParameter parameter
@@ -112,28 +135,28 @@ public final class Assets implements Disposable {
         parameter.minFilter = Texture.TextureFilter.Linear;
         parameter.magFilter = Texture.TextureFilter.Linear;
 
-        largeFont = loadFont(fontGenerator, parameter, Constants.LARGE_FONT_SIZE);
-        mediumFont = loadFont(fontGenerator, parameter, Constants.MEDIUM_FONT_SIZE);
-        smallFont = loadFont(fontGenerator, parameter, Constants.SMALL_FONT_SIZE);
+        largeFont = loadFont(fontGenerator, parameter, LARGE_FONT_SIZE);
+        mediumFont = loadFont(fontGenerator, parameter, MEDIUM_FONT_SIZE);
+        smallFont = loadFont(fontGenerator, parameter, SMALL_FONT_SIZE);
 
         // finished with font generator so dispose it
         assetManager.unload(FONT_GENERATOR_ASSET_DESCRIPTOR.fileName);
     }
 
-    private BitmapFont loadFont(FreeTypeFontGenerator fontGenerator,
-                                FreeTypeFontGenerator.FreeTypeFontParameter parameter,
-                                int fontSize) {
+    private static BitmapFont loadFont(FreeTypeFontGenerator fontGenerator,
+                                       FreeTypeFontGenerator.FreeTypeFontParameter parameter,
+                                       int fontSize) {
         parameter.size = fontSize;
         return fontGenerator.generateFont(parameter);
     }
 
-    private void loadMusic() {
+    private static void loadMusic() {
         music = assetManager.get(MUSIC_ASSET_DESCRIPTOR);
-        music.setVolume(Constants.MUSIC_VOLUME);
+        music.setVolume(MUSIC_VOLUME);
         music.setLooping(true);
     }
 
-    private void loadTextureRegions() {
+    private static void loadTextureRegions() {
         TextureAtlas textureAtlas = assetManager.get(TEXTURE_ATLAS_ASSET_DESCRIPTOR);
         background = textureAtlas.findRegion("background");
         gameFrame = textureAtlas.findRegion("game-frame");
@@ -157,168 +180,170 @@ public final class Assets implements Disposable {
     /**
      * @return the splash background {@link Texture}
      */
-    public Texture getSplashBackground() {
+    public static Texture getSplashBackground() {
         return splashBackground;
     }
 
     /**
      * @return the large {@link BitmapFont}
      */
-    public BitmapFont getLargeFont() {
+    public static BitmapFont getLargeFont() {
         return largeFont;
     }
 
     /**
      * @return the medium {@link BitmapFont}
      */
-    public BitmapFont getMediumFont() {
+    public static BitmapFont getMediumFont() {
         return mediumFont;
     }
 
     /**
      * @return the small {@link BitmapFont}
      */
-    public BitmapFont getSmallFont() {
+    public static BitmapFont getSmallFont() {
         return smallFont;
     }
 
     /**
      * @return the game {@link Music}
      */
-    public Music getMusic() {
+    public static Music getMusic() {
         return music;
     }
 
     /**
      * @return the background {@link TextureRegion}
      */
-    public TextureRegion getBackground() {
+    public static TextureRegion getBackground() {
         return background;
     }
 
     /**
      * @return the game frame {@link TextureRegion}
      */
-    public TextureRegion getGameFrame() {
+    public static TextureRegion getGameFrame() {
         return gameFrame;
     }
 
     /**
      * @return the large up arrow {@link TextureRegion}
      */
-    public TextureRegion getLargeUpArrow() {
+    public static TextureRegion getLargeUpArrow() {
         return largeUpArrow;
     }
 
     /**
      * @return the large up arrow pressed {@link TextureRegion}
      */
-    public TextureRegion getLargeUpArrowPressed() {
+    public static TextureRegion getLargeUpArrowPressed() {
         return largeUpArrowPressed;
     }
 
     /**
      * @return the large right arrow {@link TextureRegion}
      */
-    public TextureRegion getLargeRightArrow() {
+    public static TextureRegion getLargeRightArrow() {
         return largeRightArrow;
     }
 
     /**
      * @return the large right arrow pressed {@link TextureRegion}
      */
-    public TextureRegion getLargeRightArrowPressed() {
+    public static TextureRegion getLargeRightArrowPressed() {
         return largeRightArrowPressed;
     }
 
     /**
      * @return the large down arrow {@link TextureRegion}
      */
-    public TextureRegion getLargeDownArrow() {
+    public static TextureRegion getLargeDownArrow() {
         return largeDownArrow;
     }
 
     /**
      * @return the large down arrow pressed {@link TextureRegion}
      */
-    public TextureRegion getLargeDownArrowPressed() {
+    public static TextureRegion getLargeDownArrowPressed() {
         return largeDownArrowPressed;
     }
 
     /**
      * @return the large left arrow {@link TextureRegion}
      */
-    public TextureRegion getLargeLeftArrow() {
+    public static TextureRegion getLargeLeftArrow() {
         return largeLeftArrow;
     }
 
     /**
      * @return the large left arrow pressed {@link TextureRegion}
      */
-    public TextureRegion getLargeLeftArrowPressed() {
+    public static TextureRegion getLargeLeftArrowPressed() {
         return largeLeftArrowPressed;
     }
 
     /**
      * @return the small right arrow {@link TextureRegion}
      */
-    public TextureRegion getSmallRightArrow() {
+    public static TextureRegion getSmallRightArrow() {
         return smallRightArrow;
     }
 
     /**
      * @return the small right arrow pressed {@link TextureRegion}
      */
-    public TextureRegion getSmallRightArrowPressed() {
+    public static TextureRegion getSmallRightArrowPressed() {
         return smallRightArrowPressed;
     }
 
     /**
      * @return the small left arrow {@link TextureRegion}
      */
-    public TextureRegion getSmallLeftArrow() {
+    public static TextureRegion getSmallLeftArrow() {
         return smallLeftArrow;
     }
 
     /**
      * @return the small left arrow pressed {@link TextureRegion}
      */
-    public TextureRegion getSmallLeftArrowPressed() {
+    public static TextureRegion getSmallLeftArrowPressed() {
         return smallLeftArrowPressed;
     }
 
     /**
      * @return the pause {@link TextureRegion}
      */
-    public TextureRegion getPause() {
+    public static TextureRegion getPause() {
         return pause;
     }
 
     /**
      * @return the pause pressed {@link TextureRegion}
      */
-    public TextureRegion getPausePressed() {
+    public static TextureRegion getPausePressed() {
         return pausePressed;
     }
 
     /**
      * @return the block {@link TextureRegion}
      */
-    public TextureRegion getBlock() {
+    public static TextureRegion getBlock() {
         return block;
     }
 
     /**
      * Disposes the splash background {@link Texture}.
      */
-    public void disposeSplashBackground() {
+    public static void disposeSplashBackground() {
         if (assetManager.isLoaded(SPLASH_BACKGROUND_ASSET_DESCRIPTOR.fileName)) {
             assetManager.unload(SPLASH_BACKGROUND_ASSET_DESCRIPTOR.fileName);
         }
     }
 
-    @Override
-    public void dispose() {
+    /**
+     * Dispose the assets loaded in.
+     */
+    public static void dispose() {
         assetManager.dispose();
         largeFont.dispose();
         mediumFont.dispose();

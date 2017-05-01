@@ -1,6 +1,5 @@
 package lowe.mike.snake.screen;
 
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -15,12 +14,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 
-import lowe.mike.snake.Constants;
-import lowe.mike.snake.state.GameSettings;
-import lowe.mike.snake.state.GameState;
+import lowe.mike.snake.SnakeGame;
 import lowe.mike.snake.util.Assets;
 import lowe.mike.snake.util.ScreenManager;
+import lowe.mike.snake.util.State;
 import lowe.mike.snake.util.Utils;
+import lowe.mike.snake.world.Level;
 
 /**
  * Settings screen to show settings that the user can change.
@@ -33,22 +32,18 @@ final class SettingsScreen extends BaseScreen {
 
     /**
      * Creates a new {@code SettingsScreen} given the {@link Assets}, the {@link SpriteBatch},
-     * the {@link ScreenManager} and the {@link GameState}.
+     * the {@link ScreenManager}.
      *
-     * @param assets        the {@link Assets} containing assets used in the {@link Screen}
      * @param spriteBatch   the {@link SpriteBatch} to add sprites to
-     * @param screenManager the {@link ScreenManager} used to manage game {@link Screen}s
-     * @param gameState     the {@link GameState} containing the current game state
      */
-    SettingsScreen(Assets assets, SpriteBatch spriteBatch, ScreenManager screenManager,
-                   GameState gameState) {
-        super(assets, spriteBatch, screenManager, gameState);
+    SettingsScreen(SpriteBatch spriteBatch) {
+        super(spriteBatch);
         setBackground();
         addMenu();
     }
 
     private void setBackground() {
-        stage.addActor(new Image(assets.getBackground()));
+        stage.addActor(new Image(Assets.getBackground()));
     }
 
     private void addMenu() {
@@ -63,7 +58,7 @@ final class SettingsScreen extends BaseScreen {
 
     private void addMusicLabel(Table menu) {
         menu.row();
-        Label musicLabel = Utils.createTextLabel(assets.getMediumFont(), "Music");
+        Label musicLabel = Utils.createTextLabel(Assets.getMediumFont(), "Music");
         menu.add(musicLabel).expandX().colspan(COL_SPAN);
     }
 
@@ -78,9 +73,9 @@ final class SettingsScreen extends BaseScreen {
         horizontalGroup.space(COMPONENT_SPACING * 2);
 
         // create the buttons
-        boolean shouldPlayMusic = GameSettings.shouldPlayMusic();
-        TextButton onButton = Utils.createCheckableTextButton(assets.getMediumFont(), "On");
-        TextButton offButton = Utils.createCheckableTextButton(assets.getMediumFont(), "Off");
+        boolean shouldPlayMusic = State.shouldPlayMusic();
+        TextButton onButton = Utils.createCheckableTextButton(Assets.getMediumFont(), "On");
+        TextButton offButton = Utils.createCheckableTextButton(Assets.getMediumFont(), "Off");
 
         // add to button group
         ButtonGroup<TextButton> buttonGroup = new ButtonGroup<TextButton>();
@@ -110,8 +105,8 @@ final class SettingsScreen extends BaseScreen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (musicButton.isChecked()) {
-                    GameSettings.setShouldPlayMusic(shouldPlayMusic);
-                    Utils.playMusic(assets.getMusic(), shouldPlayMusic);
+                    State.setShouldPlayMusic(shouldPlayMusic);
+                    Utils.playMusic(Assets.getMusic(), shouldPlayMusic);
                 }
             }
 
@@ -120,20 +115,20 @@ final class SettingsScreen extends BaseScreen {
 
     private void addLevelLabel(Table menu) {
         menu.row().padTop(COMPONENT_SPACING);
-        Label levelLabel = Utils.createTextLabel(assets.getMediumFont(), "Level");
+        Label levelLabel = Utils.createTextLabel(Assets.getMediumFont(), "Level");
         menu.add(levelLabel).expandX().colspan(COL_SPAN);
     }
 
     private void addLevelButtons(Table menu) {
         menu.row().padBottom(COMPONENT_SPACING);
-        Label numberLabel = Utils.createNumberLabel(assets.getMediumFont(),
-                GameSettings.getLevel());
+        Label numberLabel = Utils.createNumberLabel(Assets.getMediumFont(),
+                State.getLevel());
 
-        float width = Constants.GAME_WIDTH / COL_SPAN;
+        float width = SnakeGame.WIDTH / COL_SPAN;
 
         // create left arrow
         ImageButton leftArrowButton = createArrowButton(
-                assets.getSmallLeftArrow(), assets.getSmallLeftArrowPressed(), numberLabel, -1);
+                Assets.getSmallLeftArrow(), Assets.getSmallLeftArrowPressed(), numberLabel, -1);
         leftArrowButton.align(Align.right);
         menu.add(leftArrowButton).width(width);
 
@@ -142,7 +137,7 @@ final class SettingsScreen extends BaseScreen {
 
         // create right arrow
         ImageButton rightArrowButton = createArrowButton(
-                assets.getSmallRightArrow(), assets.getSmallRightArrowPressed(), numberLabel, 1);
+                Assets.getSmallRightArrow(), Assets.getSmallRightArrowPressed(), numberLabel, 1);
         rightArrowButton.align(Align.left);
         menu.add(rightArrowButton).width(width);
     }
@@ -160,9 +155,9 @@ final class SettingsScreen extends BaseScreen {
 
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                int level = GameSettings.getLevel() + levelIncrement;
-                if (level >= Constants.MIN_LEVEL && level <= Constants.MAX_LEVEL) {
-                    GameSettings.setLevel(level);
+                int level = State.getLevel() + levelIncrement;
+                if (level >= Level.MINIMUM && level <= Level.MAXIMUM) {
+                    State.setLevel(level);
                     Utils.updateNumberLabel(numberLabel, level);
                 }
             }
@@ -177,7 +172,7 @@ final class SettingsScreen extends BaseScreen {
     }
 
     private TextButton createBackButton() {
-        TextButton backButton = Utils.createTextButton(assets.getMediumFont(), "Back");
+        TextButton backButton = Utils.createTextButton(Assets.getMediumFont(), "Back");
         addBackButtonListener(backButton);
         return backButton;
     }
@@ -187,7 +182,7 @@ final class SettingsScreen extends BaseScreen {
 
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                screenManager.switchToPreviousScreen();
+                ScreenManager.switchToPreviousScreen();
             }
 
         });
