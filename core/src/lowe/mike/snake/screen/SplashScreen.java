@@ -14,8 +14,7 @@ import lowe.mike.snake.util.ScreenManager;
 public final class SplashScreen extends BaseScreen {
 
     /**
-     * Creates a new {@code SplashScreen} given the {@link Assets}, the {@link SpriteBatch},
-     * the {@link ScreenManager}.
+     * Creates a new {@code SplashScreen} given a {@link SpriteBatch}.
      *
      * @param spriteBatch the {@link SpriteBatch} to add sprites to
      */

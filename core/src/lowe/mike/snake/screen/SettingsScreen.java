@@ -31,8 +31,7 @@ final class SettingsScreen extends BaseScreen {
     private static final int COL_SPAN = 3;
 
     /**
-     * Creates a new {@code SettingsScreen} given the {@link Assets}, the {@link SpriteBatch},
-     * the {@link ScreenManager}.
+     * Creates a new {@code SettingsScreen} given a {@link SpriteBatch}.
      *
      * @param spriteBatch the {@link SpriteBatch} to add sprites to
      */

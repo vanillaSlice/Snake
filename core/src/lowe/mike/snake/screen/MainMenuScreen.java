@@ -22,8 +22,7 @@ import lowe.mike.snake.util.Utils;
 final class MainMenuScreen extends BaseScreen {
 
     /**
-     * Creates a new {@code MainMenuScreen} given the {@link Assets}, the {@link SpriteBatch},
-     * the {@link ScreenManager}.
+     * Creates a new {@code MainMenuScreen} given a {@link SpriteBatch}.
      *
      * @param spriteBatch the {@link SpriteBatch} to add sprites to
      */

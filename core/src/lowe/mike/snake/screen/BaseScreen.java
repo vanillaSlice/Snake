@@ -11,7 +11,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import lowe.mike.snake.SnakeGame;
-import lowe.mike.snake.util.Assets;
 
 /**
  * Provides a base class for the {@link Screen}s in the game.
@@ -29,7 +28,7 @@ class BaseScreen extends ScreenAdapter {
     private final Viewport viewport;
 
     /**
-     * Creates a new {@code BaseScreen} given the {@link Assets}, the {@link SpriteBatch},
+     * Creates a new {@code BaseScreen} given a {@link SpriteBatch}.
      *
      * @param spriteBatch the {@link SpriteBatch} to add sprites to
      */

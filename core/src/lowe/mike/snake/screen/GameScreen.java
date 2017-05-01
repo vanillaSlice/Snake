@@ -26,9 +26,6 @@ import lowe.mike.snake.world.World;
  */
 final class GameScreen extends BaseScreen {
 
-    private static final float X = COMPONENT_SPACING;
-    private static final float Y = 240f;
-
     private final Label scoreLabel;
     private final World world;
     private final ImageButton upButton;
@@ -45,8 +42,7 @@ final class GameScreen extends BaseScreen {
     private final Label currentScoreLabel;
 
     /**
-     * Creates a new {@code GameScreen} given the {@link Assets}, the {@link SpriteBatch},
-     * the {@link ScreenManager}.
+     * Creates a new {@code GameScreen} given a {@link SpriteBatch}.
      *
      * @param spriteBatch the {@link SpriteBatch} to add sprites to
      */
@@ -152,11 +148,12 @@ final class GameScreen extends BaseScreen {
         ImageButton pauseButton = Utils.createImageButton(Assets.getPause(),
                 Assets.getPausePressed());
         pauseButton.setPosition(304f, 200f);
-        pauseButton.addListener(new InputListener() {
+        final GameScreen inst = this;
+        pauseButton.addListener(new ChangeListener() {
 
             @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                return super.touchDown(event, x, y, pointer, button);
+            public void changed(ChangeEvent event, Actor actor) {
+                ScreenManager.setScreen(new PauseScreen(spriteBatch, inst));
             }
         });
         return pauseButton;
@@ -211,7 +208,7 @@ final class GameScreen extends BaseScreen {
         return newGameButton;
     }
 
-    private void newGame() {
+    public void newGame() {
         State.setGameOver(false);
         State.setCurrentScore(0);
         world.reset();
@@ -222,6 +219,7 @@ final class GameScreen extends BaseScreen {
         showState();
         if (State.isGameOver()) {
             updateInGameOverState();
+            ScreenManager.setScreen(new GameOverScreen(spriteBatch, this));
         } else {
             updateInRunningState(delta);
         }
