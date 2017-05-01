@@ -191,6 +191,7 @@ final class GameScreen extends BaseScreen {
     void update(float delta) {
         // switch screens if game is over
         if (State.isGameOver()) {
+            updateHighScore();
             ScreenManager.setScreen(new GameOverScreen(spriteBatch, this));
             return;
         }
@@ -198,6 +199,12 @@ final class GameScreen extends BaseScreen {
         handleUserInput();
         updateScoreLabel();
         updateBonusLabel();
+    }
+
+    private void updateHighScore() {
+        if (State.getCurrentScore() > State.getHighScore()) {
+            State.setHighScore(State.getCurrentScore());
+        }
     }
 
     private void handleUserInput() {
