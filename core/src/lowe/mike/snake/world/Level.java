@@ -9,11 +9,11 @@ package lowe.mike.snake.world;
  */
 public final class Level {
 
-    // don't want instances
-    private Level() {
-    }
+  // don't want instances
+  private Level() {
+  }
 
-    public static final int MINIMUM = 1;
-    public static final int MAXIMUM = 9;
+  public static final int MINIMUM = 1;
+  public static final int MAXIMUM = 9;
 
 }

@@ -9,22 +9,22 @@ package lowe.mike.snake.world;
  */
 final class BonusFood extends Food {
 
-    private static final float FLASH_TICK_INTERVAL = .05f;
+  private static final float FLASH_TICK_INTERVAL = .05f;
 
-    private float flashTick;
+  private float flashTick;
 
-    /**
-     * Makes this {@code BonusFood} flash when appropriate.
-     *
-     * @param delta time in seconds since the last frame
-     */
-    void updateFlash(float delta) {
-        if (flashTick >= FLASH_TICK_INTERVAL) {
-            flashTick -= FLASH_TICK_INTERVAL;
-            setVisible(!isVisible());
-        } else {
-            flashTick += delta;
-        }
+  /**
+   * Makes this {@code BonusFood} flash when appropriate.
+   *
+   * @param delta time in seconds since the last frame
+   */
+  void updateFlash(float delta) {
+    if (flashTick >= FLASH_TICK_INTERVAL) {
+      flashTick -= FLASH_TICK_INTERVAL;
+      setVisible(!isVisible());
+    } else {
+      flashTick += delta;
     }
+  }
 
 }

@@ -13,28 +13,28 @@ import lowe.mike.snake.SnakeGame;
  */
 public final class Snake {
 
-    private static final String[] ICON_PATHS = {"icon-16x16.png", "icon-32x32.png",
-            "icon-64x64.png", "icon-128x128.png"};
+  private static final String[] ICON_PATHS = {"icon-16x16.png", "icon-32x32.png",
+      "icon-64x64.png", "icon-128x128.png"};
 
-    public static void main(String[] arg) {
-        SnakeGame game = new SnakeGame();
-        LwjglApplicationConfiguration config = initialiseConfig();
-        new LwjglApplication(game, config);
-    }
+  public static void main(String[] arg) {
+    SnakeGame game = new SnakeGame();
+    LwjglApplicationConfiguration config = initialiseConfig();
+    new LwjglApplication(game, config);
+  }
 
-    private static LwjglApplicationConfiguration initialiseConfig() {
-        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.title = SnakeGame.TITLE;
-        config.width = SnakeGame.WIDTH;
-        config.height = SnakeGame.HEIGHT;
-        addIcons(config);
-        return config;
-    }
+  private static LwjglApplicationConfiguration initialiseConfig() {
+    LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+    config.title = SnakeGame.TITLE;
+    config.width = SnakeGame.WIDTH;
+    config.height = SnakeGame.HEIGHT;
+    addIcons(config);
+    return config;
+  }
 
-    private static void addIcons(LwjglApplicationConfiguration config) {
-        for (String iconPath : ICON_PATHS) {
-            config.addIcon(iconPath, Files.FileType.Internal);
-        }
+  private static void addIcons(LwjglApplicationConfiguration config) {
+    for (String iconPath : ICON_PATHS) {
+      config.addIcon(iconPath, Files.FileType.Internal);
     }
+  }
 
 }

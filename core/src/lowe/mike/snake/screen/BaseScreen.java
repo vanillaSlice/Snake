@@ -19,65 +19,65 @@ import lowe.mike.snake.SnakeGame;
  */
 class BaseScreen extends ScreenAdapter {
 
-    static final float COMPONENT_SPACING = 20f;
+  static final float COMPONENT_SPACING = 20f;
 
-    final SpriteBatch spriteBatch;
-    final Stage stage;
+  final SpriteBatch spriteBatch;
+  final Stage stage;
 
-    private final OrthographicCamera camera = new OrthographicCamera();
-    private final Viewport viewport;
+  private final OrthographicCamera camera = new OrthographicCamera();
+  private final Viewport viewport;
 
-    /**
-     * Creates a new {@code BaseScreen} given a {@link SpriteBatch}.
-     *
-     * @param spriteBatch the {@link SpriteBatch} to add sprites to
-     */
-    BaseScreen(SpriteBatch spriteBatch) {
-        this.spriteBatch = spriteBatch;
-        this.camera.setToOrtho(false);
-        this.viewport = new FitViewport(SnakeGame.WIDTH, SnakeGame.HEIGHT, this.camera);
-        this.stage = new Stage(this.viewport, this.spriteBatch);
-    }
+  /**
+   * Creates a new {@code BaseScreen} given a {@link SpriteBatch}.
+   *
+   * @param spriteBatch the {@link SpriteBatch} to add sprites to
+   */
+  BaseScreen(SpriteBatch spriteBatch) {
+    this.spriteBatch = spriteBatch;
+    this.camera.setToOrtho(false);
+    this.viewport = new FitViewport(SnakeGame.WIDTH, SnakeGame.HEIGHT, this.camera);
+    this.stage = new Stage(this.viewport, this.spriteBatch);
+  }
 
-    @Override
-    public final void show() {
-        Gdx.input.setInputProcessor(stage);
-    }
+  @Override
+  public final void show() {
+    Gdx.input.setInputProcessor(stage);
+  }
 
-    @Override
-    public final void resize(int width, int height) {
-        viewport.update(width, height);
-    }
+  @Override
+  public final void resize(int width, int height) {
+    viewport.update(width, height);
+  }
 
-    @Override
-    public final void render(float delta) {
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        update(delta);
-        spriteBatch.setProjectionMatrix(camera.combined);
-        stage.act(delta);
-        stage.draw();
-    }
+  @Override
+  public final void render(float delta) {
+    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+    update(delta);
+    spriteBatch.setProjectionMatrix(camera.combined);
+    stage.act(delta);
+    stage.draw();
+  }
 
-    /**
-     * Method that subclasses can override to determine how to
-     * update the {@link Screen} in each frame.
-     *
-     * @param delta time in seconds since the last frame
-     */
-    void update(float delta) {
-    }
+  /**
+   * Method that subclasses can override to determine how to
+   * update the {@link Screen} in each frame.
+   *
+   * @param delta time in seconds since the last frame
+   */
+  void update(float delta) {
+  }
 
-    @Override
-    public final void dispose() {
-        stage.dispose();
-        onDispose();
-    }
+  @Override
+  public final void dispose() {
+    stage.dispose();
+    onDispose();
+  }
 
-    /**
-     * Method that subclasses can override to determine what to
-     * dispose.
-     */
-    void onDispose() {
-    }
+  /**
+   * Method that subclasses can override to determine what to
+   * dispose.
+   */
+  void onDispose() {
+  }
 
 }

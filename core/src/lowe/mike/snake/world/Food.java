@@ -11,11 +11,11 @@ import lowe.mike.snake.util.Assets;
  */
 class Food extends Image {
 
-    /**
-     * Creates a new {@code Food} instance.
-     */
-    Food() {
-        super(Assets.getBlock());
-    }
+  /**
+   * Creates a new {@code Food} instance.
+   */
+  Food() {
+    super(Assets.getBlock());
+  }
 
 }

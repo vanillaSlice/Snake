@@ -15,26 +15,26 @@ import lowe.mike.snake.util.State;
  */
 public final class SnakeGame extends Game {
 
-    public static final String TITLE = "Snake";
-    public static final int WIDTH = 360;
-    public static final int HEIGHT = 640;
+  public static final String TITLE = "Snake";
+  public static final int WIDTH = 360;
+  public static final int HEIGHT = 640;
 
-    private SpriteBatch spriteBatch;
+  private SpriteBatch spriteBatch;
 
-    @Override
-    public void create() {
-        State.initialise();
-        Assets.initialise();
-        ScreenManager.initialise(this);
-        spriteBatch = new SpriteBatch();
-        ScreenManager.setScreen(new SplashScreen(spriteBatch));
-    }
+  @Override
+  public void create() {
+    State.initialise();
+    Assets.initialise();
+    ScreenManager.initialise(this);
+    spriteBatch = new SpriteBatch();
+    ScreenManager.setScreen(new SplashScreen(spriteBatch));
+  }
 
-    @Override
-    public void dispose() {
-        Assets.dispose();
-        ScreenManager.disposeAndClearAllScreens();
-        spriteBatch.dispose();
-    }
+  @Override
+  public void dispose() {
+    Assets.dispose();
+    ScreenManager.disposeAndClearAllScreens();
+    spriteBatch.dispose();
+  }
 
 }

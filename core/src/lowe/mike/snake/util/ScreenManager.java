@@ -14,58 +14,58 @@ import com.badlogic.gdx.utils.Array;
  */
 public final class ScreenManager {
 
-    private static Game game;
-    private static Array<Screen> screens;
+  private static Game game;
+  private static Array<Screen> screens;
 
-    // don't want instances
-    private ScreenManager() {
-    }
+  // don't want instances
+  private ScreenManager() {
+  }
 
-    /**
-     * Initialises the {@code ScreenManager} with a reference to the
-     * {@link Game}.
-     *
-     * @param game reference to the {@link Game}
-     */
-    public static void initialise(Game game) {
-        ScreenManager.game = game;
-        screens = new Array<Screen>();
-    }
+  /**
+   * Initialises the {@code ScreenManager} with a reference to the
+   * {@link Game}.
+   *
+   * @param game reference to the {@link Game}
+   */
+  public static void initialise(Game game) {
+    ScreenManager.game = game;
+    screens = new Array<Screen>();
+  }
 
-    /**
-     * Sets the {@link Screen} to display. Note that any existing
-     * {@link Screen}s are NOT disposed.
-     *
-     * @param screen the {@link Screen} to display
-     */
-    public static void setScreen(Screen screen) {
-        screens.add(screen);
-        game.setScreen(screen);
-    }
+  /**
+   * Sets the {@link Screen} to display. Note that any existing
+   * {@link Screen}s are NOT disposed.
+   *
+   * @param screen the {@link Screen} to display
+   */
+  public static void setScreen(Screen screen) {
+    screens.add(screen);
+    game.setScreen(screen);
+  }
 
-    /**
-     * Switches to the previous {@link Screen}, if one exists. Note that
-     * this removes and disposes the current {@link Screen}, if one exists.
-     */
-    public static void switchToPreviousScreen() {
-        // remove and dispose current screen
-        if (screens.size != 0) {
-            screens.pop().dispose();
-            // switch to previous screen
-            if (screens.size != 0) {
-                game.setScreen(screens.peek());
-            }
-        }
+  /**
+   * Switches to the previous {@link Screen}, if one exists. Note that
+   * this removes and disposes the current {@link Screen}, if one exists.
+   */
+  public static void switchToPreviousScreen() {
+    // remove and dispose current screen
+    if (screens.size != 0) {
+      screens.pop().dispose();
+      // switch to previous screen
+      if (screens.size != 0) {
+        game.setScreen(screens.peek());
+      }
     }
+  }
 
-    /**
-     * Disposes and clears all {@link Screen}s.
-     */
-    public static void disposeAndClearAllScreens() {
-        for (Screen screen : screens) {
-            screen.dispose();
-        }
-        screens.clear();
+  /**
+   * Disposes and clears all {@link Screen}s.
+   */
+  public static void disposeAndClearAllScreens() {
+    for (Screen screen : screens) {
+      screen.dispose();
     }
+    screens.clear();
+  }
 
 }
