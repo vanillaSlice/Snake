@@ -4,7 +4,7 @@
 This is a Snake clone written using libGDX.
 
 ## Screenshot
-![screenshot](./screenshot.png)
+![screenshot](images/screenshot-1.png)
 
 ## Running the project
 
