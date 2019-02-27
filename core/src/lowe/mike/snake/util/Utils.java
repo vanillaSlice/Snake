@@ -46,7 +46,7 @@ public final class Utils {
   /**
    * Creates a {@link Label} with the given {@link BitmapFont} and number.
    *
-   * @param font   the {@link BitmapFont}
+   * @param font the {@link BitmapFont}
    * @param number number to initialise the {@link Label} with
    * @return the {@link Label}
    */
@@ -57,7 +57,7 @@ public final class Utils {
   /**
    * Sets a {@link Label}'s text to a given number.
    *
-   * @param label  the {@link Label} to update
+   * @param label the {@link Label} to update
    * @param number the number to set the {@link Label}'s text to
    */
   public static void updateNumberLabel(Label label, int number) {
@@ -103,7 +103,7 @@ public final class Utils {
   /**
    * Creates an {@link ImageButton} with the given up and down {@link TextureRegion}s.
    *
-   * @param up   the up {@link TextureRegion}
+   * @param up the up {@link TextureRegion}
    * @param down the down {@link TextureRegion}
    * @return the {@link ImageButton}
    */
@@ -120,7 +120,7 @@ public final class Utils {
   /**
    * Play or stop a {@link Music} instance depending on the value passed in.
    *
-   * @param music     the {@link Music} instance
+   * @param music the {@link Music} instance
    * @param playMusic if the {@link Music} should be played
    */
   public static void playMusic(Music music, boolean playMusic) {
@@ -140,5 +140,4 @@ public final class Utils {
     menu.center();
     return menu;
   }
-
 }

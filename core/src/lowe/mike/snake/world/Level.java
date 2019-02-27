@@ -15,5 +15,4 @@ public final class Level {
 
   public static final int MINIMUM = 1;
   public static final int MAXIMUM = 9;
-
 }

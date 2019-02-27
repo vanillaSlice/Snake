@@ -2,7 +2,6 @@ package lowe.mike.snake;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import lowe.mike.snake.screen.SplashScreen;
 import lowe.mike.snake.util.Assets;
 import lowe.mike.snake.util.ScreenManager;
@@ -36,5 +35,4 @@ public final class SnakeGame extends Game {
     ScreenManager.disposeAndClearAllScreens();
     spriteBatch.dispose();
   }
-
 }

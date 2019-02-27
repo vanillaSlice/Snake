@@ -7,7 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-
 import lowe.mike.snake.SnakeGame;
 import lowe.mike.snake.util.Assets;
 import lowe.mike.snake.util.ScreenManager;
@@ -113,5 +112,4 @@ final class MainMenuScreen extends BaseScreen {
   private void playMusic() {
     Utils.playMusic(Assets.getMusic(), State.shouldPlayMusic());
   }
-
 }

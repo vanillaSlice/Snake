@@ -12,8 +12,8 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
 
 /**
- * {@code Assets} provides access to assets, such as {@link Texture}s,
- * used in the <i>Snake</i> game.
+ * {@code Assets} provides access to assets, such as {@link Texture}s, used in the <i>Snake</i>
+ * game.
  * <p>
  * Instances of {@code Assets} cannot be created.
  *
@@ -144,8 +144,8 @@ public final class Assets {
   }
 
   private static BitmapFont loadFont(FreeTypeFontGenerator fontGenerator,
-                                     FreeTypeFontGenerator.FreeTypeFontParameter parameter,
-                                     int fontSize) {
+      FreeTypeFontGenerator.FreeTypeFontParameter parameter,
+      int fontSize) {
     parameter.size = fontSize;
     return fontGenerator.generateFont(parameter);
   }
@@ -349,5 +349,4 @@ public final class Assets {
     mediumFont.dispose();
     smallFont.dispose();
   }
-
 }

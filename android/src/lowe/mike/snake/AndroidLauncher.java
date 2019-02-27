@@ -1,7 +1,6 @@
 package lowe.mike.snake;
 
 import android.os.Bundle;
-
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 
@@ -26,5 +25,4 @@ public final class AndroidLauncher extends AndroidApplication {
     config.useCompass = false;
     return config;
   }
-
 }

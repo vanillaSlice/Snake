@@ -1,7 +1,6 @@
 package lowe.mike.snake.world;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-
 import lowe.mike.snake.util.Assets;
 
 /**
@@ -17,5 +16,4 @@ class Food extends Image {
   Food() {
     super(Assets.getBlock());
   }
-
 }

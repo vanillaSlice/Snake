@@ -6,7 +6,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-
 import lowe.mike.snake.util.Assets;
 import lowe.mike.snake.util.ScreenManager;
 import lowe.mike.snake.util.Utils;
@@ -21,11 +20,11 @@ final class PauseScreen extends BaseScreen {
   private final GameScreen gameScreen;
 
   /**
-   * Creates a new {@code PauseScreen} given a {@link SpriteBatch} and a reference to the
-   * {@link GameScreen}.
+   * Creates a new {@code PauseScreen} given a {@link SpriteBatch} and a reference to the {@link
+   * GameScreen}.
    *
    * @param spriteBatch the {@link SpriteBatch} to add sprites to
-   * @param gameScreen  reference to the {@link GameScreen}
+   * @param gameScreen reference to the {@link GameScreen}
    */
   PauseScreen(SpriteBatch spriteBatch, GameScreen gameScreen) {
     super(spriteBatch);
@@ -120,5 +119,4 @@ final class PauseScreen extends BaseScreen {
 
     });
   }
-
 }

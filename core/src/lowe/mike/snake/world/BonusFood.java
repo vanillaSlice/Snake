@@ -26,5 +26,4 @@ final class BonusFood extends Food {
       flashTick += delta;
     }
   }
-
 }

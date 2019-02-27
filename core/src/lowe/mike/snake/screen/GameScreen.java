@@ -10,9 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-
 import java.util.Locale;
-
 import lowe.mike.snake.SnakeGame;
 import lowe.mike.snake.util.Assets;
 import lowe.mike.snake.util.ScreenManager;
@@ -81,8 +79,8 @@ final class GameScreen extends BaseScreen {
   }
 
   private void addUpButton() {
-    ImageButton upButton = Utils.createImageButton(Assets.getLargeUpArrow(),
-        Assets.getLargeUpArrowPressed());
+    ImageButton upButton =
+        Utils.createImageButton(Assets.getLargeUpArrow(), Assets.getLargeUpArrowPressed());
     upButton.setPosition(UP_BUTTON_X, UP_BUTTON_Y);
     addUpButtonListener(upButton);
     stage.addActor(upButton);
@@ -100,8 +98,8 @@ final class GameScreen extends BaseScreen {
   }
 
   private void addRightButton() {
-    ImageButton rightButton = Utils.createImageButton(Assets.getLargeRightArrow(),
-        Assets.getLargeRightArrowPressed());
+    ImageButton rightButton =
+        Utils.createImageButton(Assets.getLargeRightArrow(), Assets.getLargeRightArrowPressed());
     rightButton.setPosition(RIGHT_BUTTON_X, RIGHT_BUTTON_Y);
     addRightButtonListener(rightButton);
     stage.addActor(rightButton);
@@ -119,8 +117,8 @@ final class GameScreen extends BaseScreen {
   }
 
   private void addDownButton() {
-    ImageButton downButton = Utils.createImageButton(Assets.getLargeDownArrow(),
-        Assets.getLargeDownArrowPressed());
+    ImageButton downButton =
+        Utils.createImageButton(Assets.getLargeDownArrow(), Assets.getLargeDownArrowPressed());
     downButton.setPosition(DOWN_BUTTON_X, DOWN_BUTTON_Y);
     addDownButtonListener(downButton);
     stage.addActor(downButton);
@@ -138,8 +136,8 @@ final class GameScreen extends BaseScreen {
   }
 
   private void addLeftButton() {
-    ImageButton leftButton = Utils.createImageButton(Assets.getLargeLeftArrow(),
-        Assets.getLargeLeftArrowPressed());
+    ImageButton leftButton =
+        Utils.createImageButton(Assets.getLargeLeftArrow(), Assets.getLargeLeftArrowPressed());
     leftButton.setPosition(LEFT_BUTTON_X, LEFT_BUTTON_Y);
     addLeftButtonListener(leftButton);
     stage.addActor(leftButton);
@@ -157,8 +155,8 @@ final class GameScreen extends BaseScreen {
   }
 
   private void addPauseButton() {
-    ImageButton pauseButton = Utils.createImageButton(Assets.getPause(),
-        Assets.getPausePressed());
+    ImageButton pauseButton =
+        Utils.createImageButton(Assets.getPause(), Assets.getPausePressed());
     pauseButton.setPosition(PAUSE_BUTTON_X, PAUSE_BUTTON_Y);
     addPauseButtonListener(pauseButton);
     stage.addActor(pauseButton);
@@ -230,12 +228,11 @@ final class GameScreen extends BaseScreen {
     if (world.isBonusFoodShowing()) {
       Utils.updateNumberLabel(bonusLabel, world.getBonusFoodTicksRemaining());
       bonusLabel.pack();
-      bonusLabel.setPosition(SnakeGame.WIDTH - COMPONENT_SPACING - bonusLabel.getWidth(),
-          BONUS_LABEL_Y);
+      bonusLabel
+          .setPosition(SnakeGame.WIDTH - COMPONENT_SPACING - bonusLabel.getWidth(), BONUS_LABEL_Y);
       stage.addActor(bonusLabel);
     } else {
       bonusLabel.remove();
     }
   }
-
 }

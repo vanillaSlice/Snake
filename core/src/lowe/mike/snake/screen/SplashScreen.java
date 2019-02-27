@@ -2,7 +2,6 @@ package lowe.mike.snake.screen;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-
 import lowe.mike.snake.util.Assets;
 import lowe.mike.snake.util.ScreenManager;
 
@@ -46,5 +45,4 @@ public final class SplashScreen extends BaseScreen {
     // dispose this because it won't be used again
     Assets.disposeSplashBackground();
   }
-
 }

@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
 import lowe.mike.snake.SnakeGame;
 
 /**
@@ -59,8 +58,8 @@ class BaseScreen extends ScreenAdapter {
   }
 
   /**
-   * Method that subclasses can override to determine how to
-   * update the {@link Screen} in each frame.
+   * Method that subclasses can override to determine how to update the {@link Screen} in each
+   * frame.
    *
    * @param delta time in seconds since the last frame
    */
@@ -74,10 +73,8 @@ class BaseScreen extends ScreenAdapter {
   }
 
   /**
-   * Method that subclasses can override to determine what to
-   * dispose.
+   * Method that subclasses can override to determine what to dispose.
    */
   void onDispose() {
   }
-
 }

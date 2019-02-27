@@ -2,7 +2,6 @@ package lowe.mike.snake.util;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
-
 import lowe.mike.snake.SnakeGame;
 import lowe.mike.snake.world.Level;
 
@@ -116,5 +115,4 @@ public final class State {
   public static void setGameOver(boolean isGameOver) {
     State.isGameOver = isGameOver;
   }
-
 }

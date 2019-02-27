@@ -3,7 +3,6 @@ package lowe.mike.snake.desktop;
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-
 import lowe.mike.snake.SnakeGame;
 
 /**
@@ -13,8 +12,12 @@ import lowe.mike.snake.SnakeGame;
  */
 public final class Snake {
 
-  private static final String[] ICON_PATHS = {"icon-16x16.png", "icon-32x32.png",
-      "icon-64x64.png", "icon-128x128.png"};
+  private static final String[] ICON_PATHS = {
+      "icon-16x16.png",
+      "icon-32x32.png",
+      "icon-64x64.png",
+      "icon-128x128.png"
+  };
 
   public static void main(String[] arg) {
     SnakeGame game = new SnakeGame();
@@ -36,5 +39,4 @@ public final class Snake {
       config.addIcon(iconPath, Files.FileType.Internal);
     }
   }
-
 }

@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
-
 import lowe.mike.snake.SnakeGame;
 import lowe.mike.snake.util.Assets;
 import lowe.mike.snake.util.ScreenManager;
@@ -98,7 +97,7 @@ final class SettingsScreen extends BaseScreen {
   }
 
   private void addMusicButtonListener(final TextButton musicButton,
-                                      final boolean shouldPlayMusic) {
+      final boolean shouldPlayMusic) {
     musicButton.addListener(new ChangeListener() {
 
       @Override
@@ -120,14 +119,17 @@ final class SettingsScreen extends BaseScreen {
 
   private void addLevelButtons(Table menu) {
     menu.row().padBottom(COMPONENT_SPACING);
-    Label numberLabel = Utils.createNumberLabel(Assets.getMediumFont(),
-        State.getLevel());
+    Label numberLabel = Utils.createNumberLabel(Assets.getMediumFont(), State.getLevel());
 
     float width = SnakeGame.WIDTH / COL_SPAN;
 
     // create left arrow
     ImageButton leftArrowButton = createArrowButton(
-        Assets.getSmallLeftArrow(), Assets.getSmallLeftArrowPressed(), numberLabel, -1);
+        Assets.getSmallLeftArrow(),
+        Assets.getSmallLeftArrowPressed(),
+        numberLabel,
+        -1
+    );
     leftArrowButton.align(Align.right);
     menu.add(leftArrowButton).width(width);
 
@@ -136,20 +138,27 @@ final class SettingsScreen extends BaseScreen {
 
     // create right arrow
     ImageButton rightArrowButton = createArrowButton(
-        Assets.getSmallRightArrow(), Assets.getSmallRightArrowPressed(), numberLabel, 1);
+        Assets.getSmallRightArrow(),
+        Assets.getSmallRightArrowPressed(),
+        numberLabel,
+        1
+    );
     rightArrowButton.align(Align.left);
     menu.add(rightArrowButton).width(width);
   }
 
-  private ImageButton createArrowButton(TextureRegion up, TextureRegion down, Label numberLabel,
-                                        int levelIncrement) {
+  private ImageButton createArrowButton(TextureRegion up,
+      TextureRegion down,
+      Label numberLabel,
+      int levelIncrement) {
     ImageButton arrowButton = Utils.createImageButton(up, down);
     addArrowButtonListener(arrowButton, numberLabel, levelIncrement);
     return arrowButton;
   }
 
-  private void addArrowButtonListener(ImageButton arrowButton, final Label numberLabel,
-                                      final int levelIncrement) {
+  private void addArrowButtonListener(ImageButton arrowButton,
+      final Label numberLabel,
+      final int levelIncrement) {
     arrowButton.addListener(new ChangeListener() {
 
       @Override
@@ -186,5 +195,4 @@ final class SettingsScreen extends BaseScreen {
 
     });
   }
-
 }

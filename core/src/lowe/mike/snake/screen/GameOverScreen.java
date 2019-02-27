@@ -7,9 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-
 import java.util.Locale;
-
 import lowe.mike.snake.util.Assets;
 import lowe.mike.snake.util.ScreenManager;
 import lowe.mike.snake.util.State;
@@ -25,11 +23,11 @@ final class GameOverScreen extends BaseScreen {
   private final GameScreen gameScreen;
 
   /**
-   * Creates a new {@code GameOverScreen} given a {@link SpriteBatch} and a reference to the
-   * {@link GameScreen}.
+   * Creates a new {@code GameOverScreen} given a {@link SpriteBatch} and a reference to the {@link
+   * GameScreen}.
    *
    * @param spriteBatch the {@link SpriteBatch} to add sprites to
-   * @param gameScreen  reference to the {@link GameScreen}
+   * @param gameScreen reference to the {@link GameScreen}
    */
   GameOverScreen(SpriteBatch spriteBatch, GameScreen gameScreen) {
     super(spriteBatch);
@@ -63,8 +61,10 @@ final class GameOverScreen extends BaseScreen {
     Label yourScoreLabel = Utils.createTextLabel(Assets.getSmallFont(), "Your Score");
     menu.add(yourScoreLabel);
     menu.row();
-    Label scoreLabel = Utils.createTextLabel(Assets.getSmallFont(),
-        String.format(Locale.ENGLISH, "%04d", State.getCurrentScore()));
+    Label scoreLabel = Utils.createTextLabel(
+        Assets.getSmallFont(),
+        String.format(Locale.ENGLISH, "%04d", State.getCurrentScore())
+    );
     menu.add(scoreLabel);
   }
 
@@ -73,8 +73,10 @@ final class GameOverScreen extends BaseScreen {
     Label highScoreLabel = Utils.createTextLabel(Assets.getSmallFont(), "High Score");
     menu.add(highScoreLabel);
     menu.row().padBottom(COMPONENT_SPACING);
-    Label scoreLabel = Utils.createTextLabel(Assets.getSmallFont(),
-        String.format(Locale.ENGLISH, "%04d", State.getHighScore()));
+    Label scoreLabel = Utils.createTextLabel(
+        Assets.getSmallFont(),
+        String.format(Locale.ENGLISH, "%04d", State.getHighScore())
+    );
     menu.add(scoreLabel);
   }
 
@@ -115,5 +117,4 @@ final class GameOverScreen extends BaseScreen {
 
     });
   }
-
 }
