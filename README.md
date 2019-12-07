@@ -1,7 +1,7 @@
 # Snake
 
 [![Latest Release](https://img.shields.io/github/release/vanillaSlice/Snake.svg)](https://github.com/vanillaSlice/Snake/releases/latest)
-[![Build Status](https://img.shields.io/travis/vanillaSlice/Snake/master.svg)](https://travis-ci.org/vanillaSlice/Snake)
+[![Build Status](https://img.shields.io/travis/com/vanillaSlice/Snake/master.svg)](https://travis-ci.com/vanillaSlice/Snake)
 [![License](https://img.shields.io/github/license/vanillaSlice/Snake.svg)](LICENSE)
 
 A Snake clone built using [libGDX](https://libgdx.badlogicgames.com/).
